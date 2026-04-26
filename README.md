@@ -27,7 +27,7 @@ and deploys the output to GitHub Pages automatically.
 
 ```bash
 # Install dependencies (one time)
-pip install markdown pymdown-extensions pygments jinja2
+pip install -r requirements.txt
 
 # Build all guides
 python3 scripts/build.py
