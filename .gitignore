@@ -1,0 +1,14 @@
+# MkDocs build output — deployed to gh-pages by CI
+site/
+
+# Old custom build output (no longer used)
+generated/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+
+# macOS
+.DS_Store

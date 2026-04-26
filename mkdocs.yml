@@ -1,0 +1,90 @@
+site_name: Tenzin's Technical Guides
+site_url: https://ten-jampa.github.io/cowork-artifacts/
+repo_url: https://github.com/ten-jampa/cowork-artifacts
+repo_name: ten-jampa/cowork-artifacts
+edit_uri: edit/main/docs/
+
+theme:
+  name: material
+  palette:
+    # Light mode (default)
+    - scheme: default
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    # Dark mode
+    - scheme: slate
+      primary: green
+      accent: green
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.tabs           # top-level nav tabs
+    - navigation.sections       # grouped sidebar sections
+    - navigation.top            # back-to-top button
+    - navigation.tracking       # URL updates as you scroll
+    - navigation.instant        # SPA-style instant page loads
+    - toc.follow                # TOC highlights active heading
+    - search.suggest            # autocomplete in search
+    - search.highlight          # highlight search terms on page
+    - content.code.copy         # copy button on every code block
+    - content.code.annotate     # inline code annotations
+    - content.tabs.link         # sync tabs across page
+  font:
+    text: Inter
+    code: JetBrains Mono
+  icon:
+    repo: fontawesome/brands/github
+
+markdown_extensions:
+  # Syntax highlighting
+  - pymdownx.highlight:
+      anchor_linenums: false
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.superfences
+  - pymdownx.inlinehilite
+
+  # Tabs (for NVIDIA / AMD sections)
+  - pymdownx.tabbed:
+      alternate_style: true
+
+  # Callout blocks — !!! note, !!! warning, !!! danger
+  - admonition
+  - pymdownx.details
+
+  # Task lists, smart symbols
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.smartsymbols
+
+  # Tables, definition lists, attribute lists
+  - tables
+  - def_list
+  - attr_list
+  - md_in_html
+
+  # Emoji
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+
+  # Standard extras
+  - toc:
+      permalink: true
+  - footnotes
+
+nav:
+  - Home: index.md
+  - Linux GPU Setup: linux-gpu-guide.md
+  - Local LLMs (Apple Silicon): local-llm-guide.md
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/ten-jampa
+
+copyright: "Built with MkDocs Material · April 2026"
