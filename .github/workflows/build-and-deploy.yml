@@ -6,7 +6,11 @@ on:
     paths:
       - "docs/**"          # trigger when any doc changes
       - "mkdocs.yml"       # or when config changes
+      - "requirements.txt" # or when dependencies change
   workflow_dispatch:       # allow manual trigger from GitHub Actions UI
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true  # opt into Node.js 24 ahead of June 2026 deadline
 
 jobs:
   build-and-deploy:
