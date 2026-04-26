@@ -1,0 +1,1884 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ten-jampa.github.io/cowork-artifacts/local-llm-guide/">
+      
+      
+        <link rel="prev" href="../linux-gpu-guide/">
+      
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Local LLMs (Apple Silicon) - Tenzin's Technical Guides</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#local-llm-guide-apple-m4-pro-24-gb" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Tenzin&#39;s Technical Guides" class="md-header__button md-logo" aria-label="Tenzin's Technical Guides" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tenzin's Technical Guides
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Local LLMs (Apple Silicon)
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ten-jampa/cowork-artifacts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ten-jampa/cowork-artifacts
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../linux-gpu-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Linux GPU Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Local LLMs (Apple Silicon)
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tenzin&#39;s Technical Guides" class="md-nav__button md-logo" aria-label="Tenzin's Technical Guides" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tenzin's Technical Guides
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ten-jampa/cowork-artifacts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ten-jampa/cowork-artifacts
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../linux-gpu-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux GPU Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local LLMs (Apple Silicon)
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local LLMs (Apple Silicon)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-machine-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your Machine at a Glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-apple-silicon-changes-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Apple Silicon Changes Everything
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How Apple Silicon Changes Everything">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inference-speed-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inference Speed Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moe-a-different-speed-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MoE — A Different Speed Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Landscape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Landscape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-fits-in-24-gb-20-gb-effective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Fits in 24 GB (20 GB effective)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-doesnt-fit-needs-48-gb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Doesn't Fit (Needs 48 GB+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dense-vs-moe-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dense vs MoE Trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#speed-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Speed Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-lm-studio-inference-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup — LM Studio &amp; Inference Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup — LM Studio &amp; Inference Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lm-studio-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LM Studio (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mlx-lm-fastest-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MLX-LM (Fastest, Python)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoring-memory-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring Memory &amp; Performance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Monitoring Memory &amp; Performance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stats-menu-bar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stats (Menu Bar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asitop-terminal-apple-silicon-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asitop (Terminal — Apple Silicon Specific)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-pressure-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Pressure Rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-upgrade-analysis-m4-pro-vs-m5-max" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware Upgrade Analysis — M4 Pro vs M5 Max
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware Upgrade Analysis — M4 Pro vs M5 Max">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-m5-max-unlocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What M5 Max Unlocks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-case-against-upgrading-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Case Against Upgrading Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#egpu-why-external-nvidia-gpus-dont-work-on-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eGPU — Why External NVIDIA GPUs Don't Work on Mac
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="eGPU — Why External NVIDIA GPUs Don&#39;t Work on Mac">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#realistic-alternatives-to-egpu-on-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Realistic Alternatives to "eGPU on Mac"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verdict-action-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verdict &amp; Action Plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Verdict &amp; Action Plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-machine-m4-pro-24-gb-what-to-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Machine (M4 Pro 24 GB) — What to Run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#four-action-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four Action Items
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#your-machine-at-a-glance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Your Machine at a Glance
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-apple-silicon-changes-everything" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How Apple Silicon Changes Everything
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How Apple Silicon Changes Everything">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#inference-speed-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Inference Speed Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#moe-a-different-speed-formula" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MoE — A Different Speed Formula
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#model-landscape" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Model Landscape
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Model Landscape">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-fits-in-24-gb-20-gb-effective" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Fits in 24 GB (20 GB effective)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-doesnt-fit-needs-48-gb" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Doesn't Fit (Needs 48 GB+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#dense-vs-moe-trade-off" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Dense vs MoE Trade-off
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#speed-reference" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Speed Reference
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setup-lm-studio-inference-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setup — LM Studio &amp; Inference Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Setup — LM Studio &amp; Inference Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#lm-studio-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LM Studio (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#mlx-lm-fastest-python" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        MLX-LM (Fastest, Python)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ollama" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#backend-comparison" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Backend Comparison
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#monitoring-memory-performance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Monitoring Memory &amp; Performance
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Monitoring Memory &amp; Performance">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#stats-menu-bar" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Stats (Menu Bar)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#asitop-terminal-apple-silicon-specific" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Asitop (Terminal — Apple Silicon Specific)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#memory-pressure-rule" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Memory Pressure Rule
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#hardware-upgrade-analysis-m4-pro-vs-m5-max" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Hardware Upgrade Analysis — M4 Pro vs M5 Max
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Hardware Upgrade Analysis — M4 Pro vs M5 Max">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#what-m5-max-unlocks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What M5 Max Unlocks
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#the-case-against-upgrading-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        The Case Against Upgrading Now
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#egpu-why-external-nvidia-gpus-dont-work-on-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        eGPU — Why External NVIDIA GPUs Don't Work on Mac
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="eGPU — Why External NVIDIA GPUs Don&#39;t Work on Mac">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#realistic-alternatives-to-egpu-on-mac" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Realistic Alternatives to "eGPU on Mac"
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#verdict-action-plan" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verdict &amp; Action Plan
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Verdict &amp; Action Plan">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#current-machine-m4-pro-24-gb-what-to-run" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Current Machine (M4 Pro 24 GB) — What to Run
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#four-action-items" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Four Action Items
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="local-llm-guide-apple-m4-pro-24-gb">Local LLM Guide — Apple M4 Pro 24 GB<a class="headerlink" href="#local-llm-guide-apple-m4-pro-24-gb" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Hardware:</strong> M4 Pro · 12-core CPU · 16 GPU cores · 24 GB unified memory · 273 GB/s bandwidth · Metal 4<br />
+<strong>Verified:</strong> LM Studio 0.4+ · MLX · Ollama · April 2026</p>
+</blockquote>
+<p>Running large language models locally on Apple Silicon — what fits, how fast it runs, and whether upgrading hardware is worth it.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#your-machine-at-a-glance">Your Machine at a Glance</a></li>
+<li><a href="#how-apple-silicon-changes-everything">How Apple Silicon Changes Everything</a></li>
+<li><a href="#model-landscape">Model Landscape</a></li>
+<li><a href="#speed-reference">Speed Reference</a></li>
+<li><a href="#setup-lm-studio-inference-tools">Setup — LM Studio &amp; Inference Tools</a></li>
+<li><a href="#monitoring-memory-performance">Monitoring Memory &amp; Performance</a></li>
+<li><a href="#hardware-upgrade-analysis-m4-pro-vs-m5-max">Hardware Upgrade Analysis — M4 Pro vs M5 Max</a></li>
+<li><a href="#egpu-why-external-nvidia-gpus-dont-work-on-mac">eGPU — Why External NVIDIA GPUs Don't Work on Mac</a></li>
+<li><a href="#verdict-action-plan">Verdict &amp; Action Plan</a></li>
+</ol>
+<hr />
+<h2 id="your-machine-at-a-glance">Your Machine at a Glance<a class="headerlink" href="#your-machine-at-a-glance" title="Permanent link">&para;</a></h2>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Chip</td>
+<td>Apple M4 Pro</td>
+</tr>
+<tr>
+<td>CPU</td>
+<td>12-core (8 performance + 4 efficiency)</td>
+</tr>
+<tr>
+<td>GPU</td>
+<td>16-core</td>
+</tr>
+<tr>
+<td>ANE</td>
+<td>16-core Neural Engine</td>
+</tr>
+<tr>
+<td>Unified Memory</td>
+<td>24 GB</td>
+</tr>
+<tr>
+<td>Memory Bandwidth</td>
+<td>273 GB/s</td>
+</tr>
+<tr>
+<td>GPU API</td>
+<td>Metal 4</td>
+</tr>
+<tr>
+<td>Effective LLM Budget</td>
+<td>~20 GB (after ~4 GB macOS overhead)</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="how-apple-silicon-changes-everything">How Apple Silicon Changes Everything<a class="headerlink" href="#how-apple-silicon-changes-everything" title="Permanent link">&para;</a></h2>
+<p>Apple Silicon uses <strong>Unified Memory Architecture (UMA)</strong>: the CPU, GPU, and Neural Engine all share a single pool of high-bandwidth memory. There is no separate VRAM — the full 24 GB is available to the GPU for inference.</p>
+<p>This is different from a discrete GPU on a PC: a typical 16 GB laptop GPU has 16 GB VRAM; your M4 Pro effectively has 20 GB available to the GPU (after macOS overhead). That's competitive — without the discrete GPU cost or power draw.</p>
+<h3 id="inference-speed-formula">Inference Speed Formula<a class="headerlink" href="#inference-speed-formula" title="Permanent link">&para;</a></h3>
+<p>Tokens per second on Apple Silicon is driven almost entirely by <strong>memory bandwidth</strong>, not compute:</p>
+<div class="language-text highlight"><pre><span></span><code><span id="__span-0-1">theoretical max tok/s ≈ memory_bandwidth_GB/s ÷ model_size_in_GB
+</span></code></pre></div>
+<p>For your M4 Pro (273 GB/s):
+- 8 GB model → ~34 tok/s theoretical ceiling
+- 16 GB model → ~17 tok/s
+- 20 GB model → ~14 tok/s</p>
+<p>Real-world speeds are 60–80% of theoretical due to framework overhead, quantization, attention computation etc.</p>
+<h3 id="moe-a-different-speed-formula">MoE — A Different Speed Formula<a class="headerlink" href="#moe-a-different-speed-formula" title="Permanent link">&para;</a></h3>
+<p>Mixture-of-Experts (MoE) models like Qwen3-Coder-30B-A3B and Gemma 4 26B break the pattern:</p>
+<ul>
+<li>All expert weights must be in RAM (same total footprint as an equivalent dense model)</li>
+<li>But only <strong>active parameters</strong> are read per token</li>
+<li>Speed ≈ bandwidth ÷ <strong>active_params_size</strong>, not total size</li>
+</ul>
+<p>So Qwen3-Coder-30B-A3B (30B total, 3B active) runs at speeds comparable to a 3B dense model, while fitting 30B-class knowledge into 24 GB.</p>
+<hr />
+<h2 id="model-landscape">Model Landscape<a class="headerlink" href="#model-landscape" title="Permanent link">&para;</a></h2>
+<h3 id="what-fits-in-24-gb-20-gb-effective">What Fits in 24 GB (20 GB effective)<a class="headerlink" href="#what-fits-in-24-gb-20-gb-effective" title="Permanent link">&para;</a></h3>
+<p>VRAM estimate formula for Q4_K_M quantization:
+<div class="language-text highlight"><pre><span></span><code><span id="__span-1-1">GB ≈ params_B × 4.5 / 8
+</span></code></pre></div></p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Params</th>
+<th>Size (Q4_K_M)</th>
+<th>Est. Speed</th>
+<th>Type</th>
+<th>SWE-bench</th>
+<th>Best For</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Llama 3.2 3B</td>
+<td>3B</td>
+<td>1.9 GB</td>
+<td>~90 tok/s</td>
+<td>Dense</td>
+<td>—</td>
+<td>Fast answers, low latency</td>
+</tr>
+<tr>
+<td>Phi-4 Mini</td>
+<td>3.8B</td>
+<td>2.3 GB</td>
+<td>~80 tok/s</td>
+<td>Dense</td>
+<td>—</td>
+<td>Compact reasoning</td>
+</tr>
+<tr>
+<td>Phi-4 14B</td>
+<td>14B</td>
+<td>8.5 GB</td>
+<td>~33 tok/s</td>
+<td>Dense</td>
+<td>—</td>
+<td>Math, reasoning, STEM</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 14B</td>
+<td>14B</td>
+<td>8.9 GB</td>
+<td>~31 tok/s</td>
+<td>Dense</td>
+<td>—</td>
+<td>Strong coding assistant</td>
+</tr>
+<tr>
+<td>Qwen3-Coder-30B-A3B</td>
+<td>30B total</td>
+<td>17.0 GB</td>
+<td>~32 tok/s</td>
+<td><strong>MoE</strong></td>
+<td>73.4%</td>
+<td>Top coding pick — MoE speed trick</td>
+</tr>
+<tr>
+<td>Gemma 4 26B-A4B</td>
+<td>26B total</td>
+<td>18.0 GB</td>
+<td>~30 tok/s</td>
+<td><strong>MoE</strong></td>
+<td>—</td>
+<td>Google's MoE, multilingual</td>
+</tr>
+<tr>
+<td><strong>Qwen3.6-27B</strong></td>
+<td>27B</td>
+<td>16.8 GB</td>
+<td>~12 tok/s</td>
+<td>Dense</td>
+<td><strong>77.2%</strong></td>
+<td>Best coding benchmark in 24 GB</td>
+</tr>
+<tr>
+<td>Qwen3.6-35B-A3B</td>
+<td>35B total</td>
+<td>21.0 GB</td>
+<td>~35 tok/s</td>
+<td><strong>MoE</strong></td>
+<td>73.4%</td>
+<td>Top general pick — fast MoE</td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-doesnt-fit-needs-48-gb">What Doesn't Fit (Needs 48 GB+)<a class="headerlink" href="#what-doesnt-fit-needs-48-gb" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Params</th>
+<th>Size</th>
+<th>Why it fails</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Gemma 4 31B (dense)</td>
+<td>31B</td>
+<td>17.4 GB</td>
+<td>Fits, but ~10 tok/s — barely usable</td>
+</tr>
+<tr>
+<td>Qwen2.5 32B</td>
+<td>32B</td>
+<td>19.0 GB</td>
+<td>Tight — might work with reduced context</td>
+</tr>
+<tr>
+<td>DeepSeek R1 70B</td>
+<td>70B</td>
+<td>42.0 GB</td>
+<td>Needs ~48 GB unified memory</td>
+</tr>
+<tr>
+<td>Qwen3-Coder-Next (~100B+)</td>
+<td>100B+</td>
+<td>48.2 GB+</td>
+<td>Needs 64 GB+</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>💡 <strong>Sweet spot on 24 GB:</strong> Either a MoE model (Qwen3-Coder-30B-A3B, Gemma 4 26B-A4B) for speed, or Qwen3.6-27B if benchmark quality matters more than tokens/sec.</p>
+</blockquote>
+<h3 id="dense-vs-moe-trade-off">Dense vs MoE Trade-off<a class="headerlink" href="#dense-vs-moe-trade-off" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>Dense</th>
+<th>MoE</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Inference speed</td>
+<td>Bandwidth ÷ total size</td>
+<td>Bandwidth ÷ active params</td>
+</tr>
+<tr>
+<td>RAM footprint</td>
+<td>Proportional to params</td>
+<td>Same as equivalent dense</td>
+</tr>
+<tr>
+<td>Quality/param</td>
+<td>Higher benchmark scores</td>
+<td>Slightly lower per total param</td>
+</tr>
+<tr>
+<td>Best for</td>
+<td>Highest quality at a given size</td>
+<td>Speed without losing capability</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="speed-reference">Speed Reference<a class="headerlink" href="#speed-reference" title="Permanent link">&para;</a></h2>
+<p>Estimated performance on M4 Pro 24 GB at Q4_K_M using MLX backend:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>Speed</th>
+<th>Fits?</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Llama 3.2 3B</td>
+<td>~90 tok/s</td>
+<td>✅ Easily</td>
+</tr>
+<tr>
+<td>Phi-4 Mini 3.8B</td>
+<td>~80 tok/s</td>
+<td>✅ Easily</td>
+</tr>
+<tr>
+<td>Phi-4 14B</td>
+<td>~33 tok/s</td>
+<td>✅ Comfortably</td>
+</tr>
+<tr>
+<td>Qwen2.5-Coder 14B</td>
+<td>~31 tok/s</td>
+<td>✅ Comfortably</td>
+</tr>
+<tr>
+<td>Qwen3-Coder-30B-A3B (MoE)</td>
+<td>~32 tok/s</td>
+<td>✅ (17 GB)</td>
+</tr>
+<tr>
+<td>Gemma 4 26B-A4B (MoE)</td>
+<td>~30 tok/s</td>
+<td>✅ (18 GB)</td>
+</tr>
+<tr>
+<td><strong>Qwen3.6-27B (dense)</strong></td>
+<td>~12 tok/s</td>
+<td>✅ (16.8 GB)</td>
+</tr>
+<tr>
+<td>Qwen3.6-35B-A3B (MoE)</td>
+<td>~35 tok/s</td>
+<td>⚠️ (21 GB, tight)</td>
+</tr>
+<tr>
+<td>Gemma 4 31B (dense)</td>
+<td>~10 tok/s</td>
+<td>⚠️ Barely usable</td>
+</tr>
+<tr>
+<td>Qwen2.5 32B</td>
+<td>~14 tok/s</td>
+<td>⚠️ Context limited</td>
+</tr>
+<tr>
+<td>DeepSeek R1 70B</td>
+<td>0</td>
+<td>❌ 42 GB required</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>At ~12 tok/s, Qwen3.6-27B is still usable for code review and document analysis where you're reading, not watching the stream. Below ~8 tok/s becomes frustrating for interactive use.</p>
+</blockquote>
+<hr />
+<h2 id="setup-lm-studio-inference-tools">Setup — LM Studio &amp; Inference Tools<a class="headerlink" href="#setup-lm-studio-inference-tools" title="Permanent link">&para;</a></h2>
+<h3 id="lm-studio-recommended">LM Studio (Recommended)<a class="headerlink" href="#lm-studio-recommended" title="Permanent link">&para;</a></h3>
+<p>LM Studio provides a GUI for downloading, managing, and running models locally. As of v0.4.0 it supports parallel requests and an OpenAI-compatible local server.</p>
+<p><strong>Install:</strong></p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1"><span class="c1"># Download from https://lmstudio.ai</span>
+</span><span id="__span-2-2"><span class="c1"># Or via Homebrew:</span>
+</span><span id="__span-2-3">brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>lm-studio
+</span></code></pre></div>
+<p><strong>Key settings for M4 Pro:</strong>
+- Backend: <strong>MLX</strong> (not llama.cpp) — 20–50% faster on Apple Silicon
+- GPU Layers: <strong>All</strong> (MLX handles this automatically)
+- Context Length: 4096–8192 (adjust based on model)
+- Local server: <code>localhost:1234</code> (OpenAI-compatible)</p>
+<h3 id="mlx-lm-fastest-python">MLX-LM (Fastest, Python)<a class="headerlink" href="#mlx-lm-fastest-python" title="Permanent link">&para;</a></h3>
+<p>Apple's native ML framework. Best raw inference speed on Apple Silicon.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1">pip<span class="w"> </span>install<span class="w"> </span>mlx-lm
+</span><span id="__span-3-2">
+</span><span id="__span-3-3"><span class="c1"># Run a model directly</span>
+</span><span id="__span-3-4">mlx_lm.generate<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-5"><span class="w">  </span>--model<span class="w"> </span>mlx-community/Qwen3.6-27B-4bit<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-6"><span class="w">  </span>--prompt<span class="w"> </span><span class="s2">&quot;Explain quantization in LLMs&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-7"><span class="w">  </span>--max-tokens<span class="w"> </span><span class="m">500</span>
+</span><span id="__span-3-8">
+</span><span id="__span-3-9"><span class="c1"># Start an OpenAI-compatible server</span>
+</span><span id="__span-3-10">mlx_lm.server<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-11"><span class="w">  </span>--model<span class="w"> </span>mlx-community/Qwen3-Coder-30B-A3B-4bit<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-3-12"><span class="w">  </span>--port<span class="w"> </span><span class="m">8080</span>
+</span></code></pre></div>
+<h3 id="ollama">Ollama<a class="headerlink" href="#ollama" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1">brew<span class="w"> </span>install<span class="w"> </span>ollama
+</span><span id="__span-4-2">
+</span><span id="__span-4-3"><span class="c1"># Start service</span>
+</span><span id="__span-4-4">ollama<span class="w"> </span>serve
+</span><span id="__span-4-5">
+</span><span id="__span-4-6"><span class="c1"># Pull and run models</span>
+</span><span id="__span-4-7">ollama<span class="w"> </span>pull<span class="w"> </span>qwen2.5-coder:14b
+</span><span id="__span-4-8">ollama<span class="w"> </span>run<span class="w"> </span>qwen2.5-coder:14b
+</span><span id="__span-4-9">
+</span><span id="__span-4-10"><span class="c1"># OpenAI-compatible API at localhost:11434</span>
+</span><span id="__span-4-11">curl<span class="w"> </span>http://localhost:11434/v1/chat/completions<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-12"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-13"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;qwen2.5-coder:14b&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello&quot;}]}&#39;</span>
+</span></code></pre></div>
+<h3 id="backend-comparison">Backend Comparison<a class="headerlink" href="#backend-comparison" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Tool</th>
+<th>Speed on Apple Silicon</th>
+<th>Install</th>
+<th>API</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MLX-LM</td>
+<td>⭐ Fastest (native Metal)</td>
+<td>pip</td>
+<td>Yes (llmster server)</td>
+</tr>
+<tr>
+<td>LM Studio (MLX)</td>
+<td>⭐ Fastest (uses MLX)</td>
+<td>GUI app</td>
+<td>Yes (port 1234)</td>
+</tr>
+<tr>
+<td>Ollama</td>
+<td>Good</td>
+<td>brew</td>
+<td>Yes (port 11434)</td>
+</tr>
+<tr>
+<td>llama.cpp</td>
+<td>Slower than MLX on Apple Silicon</td>
+<td>brew/build</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="monitoring-memory-performance">Monitoring Memory &amp; Performance<a class="headerlink" href="#monitoring-memory-performance" title="Permanent link">&para;</a></h2>
+<h3 id="stats-menu-bar">Stats (Menu Bar)<a class="headerlink" href="#stats-menu-bar" title="Permanent link">&para;</a></h3>
+<p>Free, visual, shows RAM/GPU/CPU in macOS menu bar.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1">brew<span class="w"> </span>install<span class="w"> </span>--cask<span class="w"> </span>stats
+</span></code></pre></div>
+<p>Open Stats preferences → enable RAM, CPU, GPU modules. Watch for <strong>memory pressure</strong> colour:
+- 🟢 Green = healthy
+- 🟡 Yellow = compressing (model near limit)
+- 🔴 Red = swapping to disk → model will slow dramatically</p>
+<h3 id="asitop-terminal-apple-silicon-specific">Asitop (Terminal — Apple Silicon Specific)<a class="headerlink" href="#asitop-terminal-apple-silicon-specific" title="Permanent link">&para;</a></h3>
+<p>Shows CPU, GPU, ANE utilization and memory bandwidth live.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1">pip3<span class="w"> </span>install<span class="w"> </span>asitop
+</span><span id="__span-6-2">sudo<span class="w"> </span>asitop
+</span></code></pre></div>
+<h3 id="memory-pressure-rule">Memory Pressure Rule<a class="headerlink" href="#memory-pressure-rule" title="Permanent link">&para;</a></h3>
+<p>When running models near the 20 GB limit, macOS will start compressing memory. You'll see token generation speed drop suddenly. Either:
+1. Reduce context window size in your inference tool
+2. Switch to a smaller quantization (Q4_K_M → Q2_K)
+3. Run a smaller model</p>
+<hr />
+<h2 id="hardware-upgrade-analysis-m4-pro-vs-m5-max">Hardware Upgrade Analysis — M4 Pro vs M5 Max<a class="headerlink" href="#hardware-upgrade-analysis-m4-pro-vs-m5-max" title="Permanent link">&para;</a></h2>
+<p>As of March 2026, the M5 Max is the current top-end MacBook Pro chip.</p>
+<table>
+<thead>
+<tr>
+<th>Spec</th>
+<th>M4 Pro (current)</th>
+<th>M5 Max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unified Memory</td>
+<td>24 GB</td>
+<td>128 GB</td>
+</tr>
+<tr>
+<td>Memory Bandwidth</td>
+<td>273 GB/s</td>
+<td>614 GB/s</td>
+</tr>
+<tr>
+<td>GPU Cores</td>
+<td>16</td>
+<td>40</td>
+</tr>
+<tr>
+<td>Effective LLM Budget</td>
+<td>~20 GB</td>
+<td>~120 GB</td>
+</tr>
+<tr>
+<td>Price (MacBook Pro)</td>
+<td>~$2,499 (paid)</td>
+<td>~$7,349+</td>
+</tr>
+<tr>
+<td><strong>Additional cost</strong></td>
+<td>—</td>
+<td><strong>~$4,850</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="what-m5-max-unlocks">What M5 Max Unlocks<a class="headerlink" href="#what-m5-max-unlocks" title="Permanent link">&para;</a></h3>
+<p>With ~120 GB effective RAM:</p>
+<table>
+<thead>
+<tr>
+<th>Model</th>
+<th>M4 Pro</th>
+<th>M5 Max</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Qwen3.6-27B (Q4)</td>
+<td>✅ 12 tok/s</td>
+<td>✅ ~27 tok/s</td>
+</tr>
+<tr>
+<td>DeepSeek R1 70B (Q4)</td>
+<td>❌ Doesn't fit</td>
+<td>✅ ~14 tok/s</td>
+</tr>
+<tr>
+<td>Llama 3.1 405B (Q2)</td>
+<td>❌</td>
+<td>✅ ~6 tok/s</td>
+</tr>
+<tr>
+<td>30B MoE (Q4)</td>
+<td>✅ 32 tok/s</td>
+<td>✅ ~70 tok/s</td>
+</tr>
+<tr>
+<td>QLoRA fine-tune 13B</td>
+<td>✅</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>QLoRA fine-tune 30B</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+<tr>
+<td>QLoRA fine-tune 70B</td>
+<td>❌</td>
+<td>✅</td>
+</tr>
+</tbody>
+</table>
+<h3 id="the-case-against-upgrading-now">The Case Against Upgrading Now<a class="headerlink" href="#the-case-against-upgrading-now" title="Permanent link">&para;</a></h3>
+<p><strong>~$4,850 additional out-of-pocket buys:</strong></p>
+<ul>
+<li>~2,400–3,600 hours of cloud A100 compute (RunPod/Lambda Labs at $1.20–2.00/hr)</li>
+<li>You could train and experiment for <strong>years</strong> at cloud scale before spending that on hardware</li>
+</ul>
+<p><strong>What you're missing that actually matters today:</strong>
+- 70B models locally (DeepSeek R1, Llama 3.1 70B): accessible via API for fractions of a cent per query
+- Fine-tuning 70B+ locally: very few practitioners do this — cloud is the standard for serious fine-tuning</p>
+<p><strong>Upgrade makes sense if:</strong>
+- You run large models continuously (8+ hours/day) — breakeven vs cloud compute at ~$0.50/hr
+- You need full offline privacy (no API calls, no cloud)
+- You are working at a lab with budget approval
+- Inference speed on 30B+ models meaningfully affects your iteration speed daily</p>
+<p><strong>Skip the upgrade if:</strong>
+- You're still learning and experimenting
+- You work mostly with 7B–14B models (M4 Pro handles these excellently)
+- Cloud compute covers your heavy lifting at lower cost</p>
+<hr />
+<h2 id="egpu-why-external-nvidia-gpus-dont-work-on-mac">eGPU — Why External NVIDIA GPUs Don't Work on Mac<a class="headerlink" href="#egpu-why-external-nvidia-gpus-dont-work-on-mac" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>If you're considering buying an NVIDIA GPU to supplement your Mac — this path is fundamentally blocked, not just inconvenient.</p>
+</blockquote>
+<p><strong>Reason 1: Apple removed eGPU support.</strong> macOS Sonoma (14.0, Sept 2023) removed eGPU support entirely. Even AMD eGPUs that previously worked no longer function. There is no driver path, no workaround.</p>
+<p><strong>Reason 2: CUDA doesn't exist on macOS.</strong> NVIDIA's ML compute stack (CUDA → cuDNN → PyTorch CUDA) has never shipped on macOS. PyTorch on macOS routes through Apple's MPS (Metal Performance Shaders) backend, which only talks to the integrated GPU.</p>
+<p>So connecting an RTX 4090 via Thunderbolt produces <strong>zero ML compute</strong> — not slow ML compute, but none at all.</p>
+<h3 id="realistic-alternatives-to-egpu-on-mac">Realistic Alternatives to "eGPU on Mac"<a class="headerlink" href="#realistic-alternatives-to-egpu-on-mac" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Option</th>
+<th>Cost</th>
+<th>CUDA/NVIDIA?</th>
+<th>Tradeoff</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Cloud compute (RunPod, Lambda, Vast.ai)</td>
+<td>~$1–3/hr for A100</td>
+<td>✅ Full CUDA</td>
+<td>Pay-per-use, best for experimentation</td>
+</tr>
+<tr>
+<td>Linux desktop with RTX 4090</td>
+<td>~$2,000–3,500</td>
+<td>✅ Full CUDA</td>
+<td>Dedicated machine, not supplementing Mac</td>
+</tr>
+<tr>
+<td>Mac Studio M3 Ultra</td>
+<td>~$3,999</td>
+<td>❌ Metal only</td>
+<td>192 GB unified memory, great local inference</td>
+</tr>
+<tr>
+<td>M5 Max MacBook Pro</td>
+<td>~$7,349</td>
+<td>❌ Metal only</td>
+<td>128 GB, portable, fast</td>
+</tr>
+</tbody>
+</table>
+<p><strong>For where most people are:</strong> cloud compute on demand is almost always the right answer. You get NVIDIA when you need it, pay nothing when you don't.</p>
+<hr />
+<h2 id="verdict-action-plan">Verdict &amp; Action Plan<a class="headerlink" href="#verdict-action-plan" title="Permanent link">&para;</a></h2>
+<h3 id="current-machine-m4-pro-24-gb-what-to-run">Current Machine (M4 Pro 24 GB) — What to Run<a class="headerlink" href="#current-machine-m4-pro-24-gb-what-to-run" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Priority</th>
+<th>Model</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1. Coding</td>
+<td>Qwen3-Coder-30B-A3B</td>
+<td>Best coding throughput on your hardware. MoE speed trick.</td>
+</tr>
+<tr>
+<td>2. General</td>
+<td>Qwen3.6-35B-A3B</td>
+<td>MoE, fast, fits in 21 GB</td>
+</tr>
+<tr>
+<td>3. Benchmarks</td>
+<td>Qwen3.6-27B</td>
+<td>77.2% SWE-bench — best quality in your VRAM budget</td>
+</tr>
+<tr>
+<td>4. Fast answers</td>
+<td>Phi-4 14B or Qwen2.5-Coder 14B</td>
+<td>~31–33 tok/s, good quality</td>
+</tr>
+<tr>
+<td>5. Ultrafast</td>
+<td>Llama 3.2 3B</td>
+<td>~90 tok/s for quick lookups</td>
+</tr>
+</tbody>
+</table>
+<h3 id="four-action-items">Four Action Items<a class="headerlink" href="#four-action-items" title="Permanent link">&para;</a></h3>
+<ol>
+<li><strong>Install LM Studio or MLX-LM</strong> — get inference running today</li>
+<li><strong>Install Stats and asitop</strong> — understand your actual memory usage under load</li>
+<li><strong>Try Qwen3-Coder-30B-A3B first</strong> — the MoE speed behaviour will surprise you</li>
+<li><strong>Don't buy hardware yet</strong> — exhaust what's possible on 24 GB first, then revisit the upgrade decision with real data from your own usage patterns</li>
+</ol>
+<hr />
+<p><em>Verified against: <a href="https://lmstudio.ai/docs">LM Studio Docs</a>, <a href="https://github.com/ml-explore/mlx-lm">MLX-LM GitHub</a>, <a href="https://ollama.com">Ollama.com</a>, <a href="https://huggingface.co/Qwen/Qwen3.6-27B">Qwen3.6-27B release (April 22 2026)</a>, <a href="https://www.apple.com/macbook-pro/">M5 Max specs — Apple (March 2026)</a> — April 2026</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Built with MkDocs Material · April 2026
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ten-jampa" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>

@@ -1,0 +1,3328 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+      
+      
+        <link rel="canonical" href="https://ten-jampa.github.io/cowork-artifacts/linux-gpu-guide/">
+      
+      
+        <link rel="prev" href="..">
+      
+      
+        <link rel="next" href="../local-llm-guide/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.6">
+    
+    
+      
+        <title>Linux GPU Setup - Tenzin's Technical Guides</title>
+      
+    
+    
+      <link rel="stylesheet" href="../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+    <script>__md_scope=new URL("..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#linux-gpu-setup-start-to-finish-2026-edition" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href=".." title="Tenzin&#39;s Technical Guides" class="md-header__button md-logo" aria-label="Tenzin's Technical Guides" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Tenzin's Technical Guides
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Linux GPU Setup
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="green" data-md-color-accent="green"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/ten-jampa/cowork-artifacts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ten-jampa/cowork-artifacts
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href=".." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    <li class="md-tabs__item md-tabs__item--active">
+      <a href="./" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Linux GPU Setup
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../local-llm-guide/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Local LLMs (Apple Silicon)
+
+      </a>
+    </li>
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href=".." title="Tenzin&#39;s Technical Guides" class="md-nav__button md-logo" aria-label="Tenzin's Technical Guides" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Tenzin's Technical Guides
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/ten-jampa/cowork-artifacts" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+  </div>
+  <div class="md-source__repository">
+    ten-jampa/cowork-artifacts
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href=".." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux GPU Setup
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Linux GPU Setup
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-flight-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-flight Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-flight Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identify-your-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identify Your GPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-kernel-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Kernel &amp; OS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-ram-secure-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check RAM &amp; Secure Boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-for-existing-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check for Existing Drivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-your-output-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Your Output Means
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-your-distro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing Your Distro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choosing Your Distro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ubuntu-2404-lts-best-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ubuntu 24.04 LTS — Best Choice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fedora-4142-cutting-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fedora 41/42 — Cutting Edge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pop_os-2404-plug-and-play" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pop!_OS 24.04 — Plug-and-Play
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpu-buying-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Buying Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GPU Buying Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-vram-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — VRAM Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-nvidia-vs-amd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — NVIDIA vs AMD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-specific-gpu-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Specific GPU Recommendations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3 — Specific GPU Recommendations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#budget-tier-500800" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Budget Tier (~$500–800)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sweet-spot-tier-8001400" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sweet Spot Tier (~$800–1,400)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enthusiast-tier-1500" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enthusiast Tier ($1,500+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-decision-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Decision Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secure-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secure Boot
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secure Boot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-disable-secure-boot-simplest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — Disable Secure Boot (Simplest)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-mok-key-enrollment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — MOK Key Enrollment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#driver-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Driver Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA Drivers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NVIDIA Drivers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#method-a-ubuntu-drivers-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method A — ubuntu-drivers (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-b-official-nvidia-network-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method B — Official NVIDIA Network Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blacklist-nouveau" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blacklist Nouveau
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-nvidia-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify NVIDIA Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fedora-rpm-fusion-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fedora — RPM Fusion Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD Drivers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AMD Drivers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rocm-installation-ubuntu-2404" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROCm Installation (Ubuntu 24.04)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-rocm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify ROCm
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cuda-toolkit-rocm-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Toolkit &amp; ROCm SDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CUDA Toolkit &amp; ROCm SDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-cuda-13x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA — CUDA 13.x
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NVIDIA — CUDA 13.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-cuda-to-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add CUDA to PATH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-version-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Version Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-rocm-7x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD — ROCm 7.x
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AMD — ROCm 7.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-fastest-rocm-onramp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker — Fastest ROCm Onramp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laptop-hybrid-graphics-optimus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laptop Hybrid Graphics (Optimus)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Laptop Hybrid Graphics (Optimus)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimus-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimus Modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prime-select-ubuntudebian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prime-select (Ubuntu/Debian)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda_visible_devices-per-command-gpu-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA_VISIBLE_DEVICES — Per-command GPU Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#python-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python Environment Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Python Environment Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mamba-recommended-for-gpuml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mamba (Recommended for GPU/ML)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mamba (Recommended for GPU/ML)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-gpu-ml-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a GPU ML Environment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#venv-pip-lightweight-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        venv + pip (Lightweight Alternative)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pytorch-gpu-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PyTorch — GPU Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PyTorch — GPU Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-cuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA (CUDA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-rocm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD (ROCm)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify GPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-ml-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core ML Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-inference-frameworks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM Inference Frameworks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LLM Inference Frameworks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ollama-easiest-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama — Easiest Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#llamacpp-most-flexible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        llama.cpp — Most Flexible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vllm-production-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vLLM — Production Throughput
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpu-monitoring-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Monitoring Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GPU Monitoring Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-smi-built-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvidia-smi (Built-in)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvtop-htop-for-gpus-nvidia-amd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvtop — htop for GPUs (NVIDIA + AMD)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvitop-richest-nvidia-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvitop — Richest NVIDIA UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-rocm-smi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD — rocm-smi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tmux-split-pane-monitor-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tmux Split-Pane Monitor Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-smi-command-not-found-has-failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvidia-smi: command not found / has failed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchcudais_available-returns-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        torch.cuda.is_available() Returns False
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laptop-gpu-detected-but-model-runs-on-cpu-optimus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laptop: GPU Detected but Model Runs on CPU (Optimus)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-out-of-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Out of Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kernel-update-broke-nvidia-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kernel Update Broke NVIDIA Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ollama-using-cpu-instead-of-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama Using CPU Instead of GPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-diagnostic-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Diagnostic Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../local-llm-guide/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Local LLMs (Apple Silicon)
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#table-of-contents" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Table of Contents
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pre-flight-checklist" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pre-flight Checklist
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Pre-flight Checklist">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#identify-your-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Identify Your GPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-kernel-os" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check Kernel &amp; OS
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-ram-secure-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check RAM &amp; Secure Boot
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#check-for-existing-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Check for Existing Drivers
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#what-your-output-means" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        What Your Output Means
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#choosing-your-distro" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Choosing Your Distro
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Choosing Your Distro">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ubuntu-2404-lts-best-choice" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ubuntu 24.04 LTS — Best Choice
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fedora-4142-cutting-edge" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fedora 41/42 — Cutting Edge
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#pop_os-2404-plug-and-play" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Pop!_OS 24.04 — Plug-and-Play
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpu-buying-guide" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Buying Guide
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GPU Buying Guide">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#step-1-vram-sizing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 1 — VRAM Sizing
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-2-nvidia-vs-amd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 2 — NVIDIA vs AMD
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#step-3-specific-gpu-recommendations" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Step 3 — Specific GPU Recommendations
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Step 3 — Specific GPU Recommendations">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#budget-tier-500800" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Budget Tier (~$500–800)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#sweet-spot-tier-8001400" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Sweet Spot Tier (~$800–1,400)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#enthusiast-tier-1500" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Enthusiast Tier ($1,500+)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#quick-decision-matrix" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Quick Decision Matrix
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#secure-boot" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Secure Boot
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Secure Boot">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#option-a-disable-secure-boot-simplest" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option A — Disable Secure Boot (Simplest)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#option-b-mok-key-enrollment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Option B — MOK Key Enrollment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#driver-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Driver Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Driver Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA Drivers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NVIDIA Drivers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#method-a-ubuntu-drivers-recommended" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method A — ubuntu-drivers (Recommended)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#method-b-official-nvidia-network-repository" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Method B — Official NVIDIA Network Repository
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#blacklist-nouveau" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Blacklist Nouveau
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-nvidia-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify NVIDIA Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#fedora-rpm-fusion-method" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Fedora — RPM Fusion Method
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-drivers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD Drivers
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AMD Drivers">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#rocm-installation-ubuntu-2404" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        ROCm Installation (Ubuntu 24.04)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-rocm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify ROCm
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#cuda-toolkit-rocm-sdk" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Toolkit &amp; ROCm SDK
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="CUDA Toolkit &amp; ROCm SDK">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-cuda-13x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA — CUDA 13.x
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="NVIDIA — CUDA 13.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#add-cuda-to-path" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Add CUDA to PATH
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-version-compatibility" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Version Compatibility
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-rocm-7x" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD — ROCm 7.x
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="AMD — ROCm 7.x">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#docker-fastest-rocm-onramp" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Docker — Fastest ROCm Onramp
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#laptop-hybrid-graphics-optimus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laptop Hybrid Graphics (Optimus)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Laptop Hybrid Graphics (Optimus)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#optimus-modes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Optimus Modes
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#prime-select-ubuntudebian" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        prime-select (Ubuntu/Debian)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda_visible_devices-per-command-gpu-control" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA_VISIBLE_DEVICES — Per-command GPU Control
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#python-environment-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Python Environment Setup
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Python Environment Setup">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#mamba-recommended-for-gpuml" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Mamba (Recommended for GPU/ML)
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Mamba (Recommended for GPU/ML)">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#create-a-gpu-ml-environment" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Create a GPU ML Environment
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#venv-pip-lightweight-alternative" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        venv + pip (Lightweight Alternative)
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#pytorch-gpu-installation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        PyTorch — GPU Installation
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="PyTorch — GPU Installation">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-cuda" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        NVIDIA (CUDA)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-rocm" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD (ROCm)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#verify-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Verify GPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#core-ml-libraries" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Core ML Libraries
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#llm-inference-frameworks" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        LLM Inference Frameworks
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="LLM Inference Frameworks">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ollama-easiest-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama — Easiest Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#llamacpp-most-flexible" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        llama.cpp — Most Flexible
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#vllm-production-throughput" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        vLLM — Production Throughput
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#gpu-monitoring-tools" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        GPU Monitoring Tools
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="GPU Monitoring Tools">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-smi-built-in" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvidia-smi (Built-in)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvtop-htop-for-gpus-nvidia-amd" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvtop — htop for GPUs (NVIDIA + AMD)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#nvitop-richest-nvidia-ui" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvitop — Richest NVIDIA UI
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#amd-rocm-smi" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        AMD — rocm-smi
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#tmux-split-pane-monitor-setup" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        tmux Split-Pane Monitor Setup
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#troubleshooting" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Troubleshooting
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Troubleshooting">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#nvidia-smi-command-not-found-has-failed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        nvidia-smi: command not found / has failed
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#torchcudais_available-returns-false" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        torch.cuda.is_available() Returns False
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#laptop-gpu-detected-but-model-runs-on-cpu-optimus" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Laptop: GPU Detected but Model Runs on CPU (Optimus)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#cuda-out-of-memory" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        CUDA Out of Memory
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#kernel-update-broke-nvidia-driver" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Kernel Update Broke NVIDIA Driver
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#ollama-using-cpu-instead-of-gpu" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ollama Using CPU Instead of GPU
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#full-diagnostic-script" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Full Diagnostic Script
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+<h1 id="linux-gpu-setup-start-to-finish-2026-edition">Linux GPU Setup — Start to Finish (2026 Edition)<a class="headerlink" href="#linux-gpu-setup-start-to-finish-2026-edition" title="Permanent link">&para;</a></h1>
+<blockquote>
+<p><strong>Verified:</strong> CUDA 13.2 · ROCm 7.1.1 · Ubuntu 24.04 LTS · PyTorch 2.9 — April 2026</p>
+</blockquote>
+<p>A comprehensive guide for getting your NVIDIA or AMD GPU fully operational on Linux for AI/ML inference and training.</p>
+<hr />
+<h2 id="table-of-contents">Table of Contents<a class="headerlink" href="#table-of-contents" title="Permanent link">&para;</a></h2>
+<ol>
+<li><a href="#pre-flight-checklist">Pre-flight Checklist</a></li>
+<li><a href="#choosing-your-distro">Choosing Your Distro</a></li>
+<li><a href="#gpu-buying-guide">GPU Buying Guide</a></li>
+<li><a href="#secure-boot">Secure Boot</a></li>
+<li><a href="#driver-installation">Driver Installation</a></li>
+<li><a href="#cuda-toolkit-rocm-sdk">CUDA Toolkit &amp; ROCm SDK</a></li>
+<li><a href="#laptop-hybrid-graphics-optimus">Laptop Hybrid Graphics (Optimus)</a></li>
+<li><a href="#python-environment-setup">Python Environment Setup</a></li>
+<li><a href="#pytorch-gpu-installation">PyTorch — GPU Installation</a></li>
+<li><a href="#llm-inference-frameworks">LLM Inference Frameworks</a></li>
+<li><a href="#gpu-monitoring-tools">GPU Monitoring Tools</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+</ol>
+<hr />
+<h2 id="pre-flight-checklist">Pre-flight Checklist<a class="headerlink" href="#pre-flight-checklist" title="Permanent link">&para;</a></h2>
+<p>Run these commands to understand exactly what you're working with before touching a single driver.</p>
+<h3 id="identify-your-gpu">Identify Your GPU<a class="headerlink" href="#identify-your-gpu" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-0-1">lspci<span class="w"> </span>-nn<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;VGA\|3D\|Display&quot;</span>
+</span><span id="__span-0-2">
+</span><span id="__span-0-3"><span class="c1"># Detailed GPU info</span>
+</span><span id="__span-0-4">lspci<span class="w"> </span>-v<span class="w"> </span>-s<span class="w"> </span><span class="k">$(</span>lspci<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>vga<span class="w"> </span><span class="p">|</span><span class="w"> </span>cut<span class="w"> </span>-d<span class="s1">&#39; &#39;</span><span class="w"> </span>-f1<span class="k">)</span>
+</span></code></pre></div>
+<h3 id="check-kernel-os">Check Kernel &amp; OS<a class="headerlink" href="#check-kernel-os" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-1-1">uname<span class="w"> </span>-r<span class="w">           </span><span class="c1"># kernel version</span>
+</span><span id="__span-1-2">lsb_release<span class="w"> </span>-a<span class="w">     </span><span class="c1"># distro/version</span>
+</span><span id="__span-1-3">cat<span class="w"> </span>/proc/driver/nvidia/version<span class="w">  </span><span class="c1"># existing NVIDIA driver?</span>
+</span></code></pre></div>
+<h3 id="check-ram-secure-boot">Check RAM &amp; Secure Boot<a class="headerlink" href="#check-ram-secure-boot" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-2-1">free<span class="w"> </span>-h<span class="w">              </span><span class="c1"># system RAM</span>
+</span><span id="__span-2-2">df<span class="w"> </span>-h<span class="w"> </span>/<span class="w">              </span><span class="c1"># disk space</span>
+</span><span id="__span-2-3">mokutil<span class="w"> </span>--sb-state<span class="w">   </span><span class="c1"># Secure Boot on/off?</span>
+</span><span id="__span-2-4">lscpu<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>arch<span class="w"> </span><span class="c1"># x86_64 or ARM?</span>
+</span></code></pre></div>
+<h3 id="check-for-existing-drivers">Check for Existing Drivers<a class="headerlink" href="#check-for-existing-drivers" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-3-1">nvidia-smi<span class="w">                                     </span><span class="c1"># NVIDIA loaded?</span>
+</span><span id="__span-3-2">rocm-smi<span class="w">                                       </span><span class="c1"># AMD ROCm loaded?</span>
+</span><span id="__span-3-3">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;nvidia\|nouveau\|amdgpu&quot;</span>
+</span></code></pre></div>
+<h3 id="what-your-output-means">What Your Output Means<a class="headerlink" href="#what-your-output-means" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>You see</th>
+<th>What it means</th>
+<th>Next step</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>NVIDIA Corporation</code> in lspci</td>
+<td>NVIDIA discrete GPU</td>
+<td>Follow NVIDIA driver path</td>
+</tr>
+<tr>
+<td><code>AMD/ATI</code> in lspci</td>
+<td>AMD discrete GPU</td>
+<td>Follow AMD/ROCm path</td>
+</tr>
+<tr>
+<td>Two GPUs (Intel + NVIDIA)</td>
+<td>Hybrid Optimus laptop</td>
+<td>Read Optimus section first</td>
+</tr>
+<tr>
+<td><code>SecureBoot enabled</code></td>
+<td>Must sign kernel modules</td>
+<td>Read Secure Boot section</td>
+</tr>
+<tr>
+<td><code>nouveau</code> in lsmod</td>
+<td>Open-source driver loaded — must blacklist</td>
+<td>See blacklist step</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="choosing-your-distro">Choosing Your Distro<a class="headerlink" href="#choosing-your-distro" title="Permanent link">&para;</a></h2>
+<h3 id="ubuntu-2404-lts-best-choice">Ubuntu 24.04 LTS — Best Choice<a class="headerlink" href="#ubuntu-2404-lts-best-choice" title="Permanent link">&para;</a></h3>
+<p>The de-facto standard for ML/AI in 2026. Largest community, most tutorials, official NVIDIA support, and <code>ubuntu-drivers</code> makes driver install nearly foolproof. LTS until 2029.</p>
+<ul>
+<li><strong>Kernel:</strong> 6.8 (HWE for 6.11+)</li>
+<li><strong>CUDA:</strong> Full support</li>
+<li><strong>ROCm:</strong> Full support</li>
+</ul>
+<h3 id="fedora-4142-cutting-edge">Fedora 41/42 — Cutting Edge<a class="headerlink" href="#fedora-4142-cutting-edge" title="Permanent link">&para;</a></h3>
+<p>Best if you want the latest PyTorch and kernel versions without waiting for Ubuntu backports. NVIDIA drivers restored in GNOME Software with Secure Boot support.</p>
+<ul>
+<li><strong>Driver install:</strong> RPM Fusion repo</li>
+<li><strong>Good for:</strong> experimenting, latest libraries</li>
+</ul>
+<h3 id="pop_os-2404-plug-and-play">Pop!_OS 24.04 — Plug-and-Play<a class="headerlink" href="#pop_os-2404-plug-and-play" title="Permanent link">&para;</a></h3>
+<p>Ships NVIDIA drivers pre-installed. Best out-of-the-box GPU experience. Based on Ubuntu so all the same tools work.</p>
+<ul>
+<li><strong>NVIDIA ISO:</strong> driver bundled</li>
+<li><strong>Optimus:</strong> handled automatically</li>
+</ul>
+<blockquote>
+<p>⚠️ <strong>Avoid</strong> Arch, Gentoo, or anything bleeding-edge for your first Linux GPU setup. Driver/kernel mismatches are the #1 cause of broken installs.</p>
+<p>💡 This guide primarily targets <strong>Ubuntu 24.04 LTS</strong> — commands are noted where they differ on Fedora.</p>
+</blockquote>
+<hr />
+<h2 id="gpu-buying-guide">GPU Buying Guide<a class="headerlink" href="#gpu-buying-guide" title="Permanent link">&para;</a></h2>
+<p>Before buying anything, three questions determine everything: <strong>How much VRAM? NVIDIA or AMD? New or used?</strong></p>
+<blockquote>
+<p>Street prices are April 2026. MSRP and street pricing are very different due to Blackwell (RTX 50xx) supply constraints.</p>
+</blockquote>
+<h3 id="step-1-vram-sizing">Step 1 — VRAM Sizing<a class="headerlink" href="#step-1-vram-sizing" title="Permanent link">&para;</a></h3>
+<p>VRAM is the single most important spec for LLM inference. A lower-generation GPU with more VRAM will almost always outperform a newer GPU with less for running large models. Model doesn't fit in VRAM → spills to system RAM → 10–100× slower.</p>
+<table>
+<thead>
+<tr>
+<th>VRAM</th>
+<th>What fits (Q4_K_M quantized)</th>
+<th>Use case</th>
+<th>Min GPU</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>8 GB</td>
+<td>Up to ~7B params</td>
+<td>Fast local assistant, coding help</td>
+<td>RTX 3070 / 4060 Ti</td>
+</tr>
+<tr>
+<td>12 GB</td>
+<td>Up to ~13B params</td>
+<td>Good quality chat, coding, summarization</td>
+<td>RTX 3080 12GB / 4070</td>
+</tr>
+<tr>
+<td>16 GB</td>
+<td>Up to ~20B params + MoE 30B</td>
+<td>Strong local models, QLoRA fine-tuning ≤13B</td>
+<td>RTX 5070 Ti / 4070 Ti Super</td>
+</tr>
+<tr>
+<td>24 GB</td>
+<td>Up to ~33B dense, or 70B Q2</td>
+<td>Serious inference, fine-tuning up to 20B</td>
+<td>RTX 3090 / 4090 / 7900 XTX</td>
+</tr>
+<tr>
+<td>32 GB</td>
+<td>Up to ~50B Q4, or 70B Q2–Q3</td>
+<td>Research, large model experimentation</td>
+<td>RTX 5090</td>
+</tr>
+<tr>
+<td>48+ GB</td>
+<td>70B Q4, 100B+ Q4</td>
+<td>Production serving, full fine-tuning 30B+</td>
+<td>RTX A6000 / multi-GPU</td>
+</tr>
+</tbody>
+</table>
+<h3 id="step-2-nvidia-vs-amd">Step 2 — NVIDIA vs AMD<a class="headerlink" href="#step-2-nvidia-vs-amd" title="Permanent link">&para;</a></h3>
+<p><strong>NVIDIA — Clear winner for ML/AI</strong></p>
+<ul>
+<li>CUDA ecosystem: PyTorch, llama.cpp, vLLM, TensorRT, bitsandbytes — all primary NVIDIA targets</li>
+<li>QLoRA fine-tuning (bitsandbytes) requires NVIDIA — won't run on AMD without patches</li>
+<li>Real-world throughput advantages over AMD are 20–40% beyond raw bandwidth</li>
+</ul>
+<p><strong>AMD — Legit with trade-offs</strong></p>
+<ul>
+<li>ROCm 7.x in 2026 is genuinely usable. PyTorch 2.9 has official ROCm wheels</li>
+<li>RX 7900 XTX: 24 GB for ~$700–850 — strong value for inference-only</li>
+<li>RX 9070 XT: official ROCm 7.2 support, 16 GB, ~$600</li>
+<li>bitsandbytes (4-bit QLoRA) is NVIDIA-only. Flash-attention needs manual ROCm ports</li>
+<li><strong>Verdict:</strong> Good for inference-only. Avoid for fine-tuning</li>
+</ul>
+<h3 id="step-3-specific-gpu-recommendations">Step 3 — Specific GPU Recommendations<a class="headerlink" href="#step-3-specific-gpu-recommendations" title="Permanent link">&para;</a></h3>
+<h4 id="budget-tier-500800">Budget Tier (~$500–800)<a class="headerlink" href="#budget-tier-500800" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>VRAM</th>
+<th>Bandwidth</th>
+<th>Street Price</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTX 3090 (used)</td>
+<td>24 GB GDDR6X</td>
+<td>936 GB/s</td>
+<td>~$550–700</td>
+<td>⭐ Best VRAM/$</td>
+</tr>
+<tr>
+<td>RX 9070 XT (AMD)</td>
+<td>16 GB GDDR6</td>
+<td>896 GB/s</td>
+<td>~$599–650</td>
+<td>Official ROCm 7.2</td>
+</tr>
+<tr>
+<td>RX 7900 XTX (AMD)</td>
+<td>24 GB GDDR6</td>
+<td>960 GB/s</td>
+<td>~$700–850</td>
+<td>24 GB for less</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Best pick:</strong> The used RTX 3090 is the VRAM king at this price — 24 GB for ~$600. Only downsides: large 3-slot cooler, runs hot (350W), buying used.</p>
+<h4 id="sweet-spot-tier-8001400">Sweet Spot Tier (~$800–1,400)<a class="headerlink" href="#sweet-spot-tier-8001400" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>VRAM</th>
+<th>Bandwidth</th>
+<th>Street Price</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTX 4070 Ti Super</td>
+<td>16 GB GDDR6X</td>
+<td>672 GB/s</td>
+<td>~$799–900</td>
+<td>Best efficiency</td>
+</tr>
+<tr>
+<td>RTX 4090</td>
+<td>24 GB GDDR6X</td>
+<td>1,008 GB/s</td>
+<td>~$1,200–1,600</td>
+<td>Best Ada value</td>
+</tr>
+<tr>
+<td>RTX 5070 Ti</td>
+<td>16 GB GDDR7</td>
+<td>896 GB/s</td>
+<td>~$1,000–1,200</td>
+<td>MSRP $749, street ~$1,000</td>
+</tr>
+<tr>
+<td>RTX 5080</td>
+<td>16 GB GDDR7</td>
+<td>960 GB/s</td>
+<td>~$1,200–1,600</td>
+<td>16 GB at high price</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Best pick:</strong> RTX 4090 at ~$1,200–1,400 (post-5090 price drop) — 24 GB, best Ada Lovelace tensor performance.</p>
+<h4 id="enthusiast-tier-1500">Enthusiast Tier ($1,500+)<a class="headerlink" href="#enthusiast-tier-1500" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>GPU</th>
+<th>VRAM</th>
+<th>Bandwidth</th>
+<th>Street Price</th>
+<th>Verdict</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>RTX 5090</td>
+<td>32 GB GDDR7</td>
+<td>1,792 GB/s</td>
+<td>~$3,000–4,000</td>
+<td>Best consumer GPU</td>
+</tr>
+<tr>
+<td>RTX A6000 (used)</td>
+<td>48 GB GDDR6</td>
+<td>768 GB/s</td>
+<td>~$2,500–3,500</td>
+<td>Workstation VRAM king</td>
+</tr>
+</tbody>
+</table>
+<p><strong>RTX 5090:</strong> 1,792 GB/s bandwidth (78% more than 4090). MSRP $1,999 but street ~$3,800 due to supply. At MSRP it's exceptional; at street price, cloud GPU time is a serious competitor.</p>
+<blockquote>
+<p>⚠️ <strong>Avoid the RTX 5080 and 5070 Ti for AI.</strong> Only 16 GB GDDR7 at $1,000–1,600 street, when a 24 GB RTX 4090 costs the same. NVIDIA's 16 GB decision on these cards is widely criticised by the ML community.</p>
+</blockquote>
+<h3 id="quick-decision-matrix">Quick Decision Matrix<a class="headerlink" href="#quick-decision-matrix" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Your situation</th>
+<th>Get this</th>
+<th>Why</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Budget ~$600, want most VRAM</td>
+<td>Used RTX 3090</td>
+<td>24 GB for ~$600, full CUDA</td>
+</tr>
+<tr>
+<td>Budget ~$600, want AMD + official ROCm</td>
+<td>RX 9070 XT</td>
+<td>Official ROCm 7.2, 16 GB GDDR6</td>
+</tr>
+<tr>
+<td>Budget ~$800, best efficiency</td>
+<td>RTX 4070 Ti Super</td>
+<td>Ada, efficient, 16 GB, full CUDA</td>
+</tr>
+<tr>
+<td>Best value for serious ML</td>
+<td>RTX 4090</td>
+<td>24 GB, best Ada tensor cores</td>
+</tr>
+<tr>
+<td>Max VRAM, cost no object</td>
+<td>RTX 5090</td>
+<td>32 GB GDDR7, 1,792 GB/s</td>
+</tr>
+<tr>
+<td>Want 40B+ without $3,000+</td>
+<td>Used RTX A6000</td>
+<td>48 GB workstation-grade</td>
+</tr>
+<tr>
+<td>Inference-only, tight budget, okay with AMD friction</td>
+<td>RX 7900 XTX</td>
+<td>24 GB for ~$700–850</td>
+</tr>
+<tr>
+<td>Primarily fine-tuning (QLoRA)</td>
+<td>RTX 4090 or 3090</td>
+<td>bitsandbytes requires NVIDIA; 24 GB comfortable</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="secure-boot">Secure Boot<a class="headerlink" href="#secure-boot" title="Permanent link">&para;</a></h2>
+<p>UEFI Secure Boot prevents unsigned kernel modules from loading. NVIDIA's proprietary driver is a kernel module, so this must be resolved first.</p>
+<h3 id="option-a-disable-secure-boot-simplest">Option A — Disable Secure Boot (Simplest)<a class="headerlink" href="#option-a-disable-secure-boot-simplest" title="Permanent link">&para;</a></h3>
+<p>Reboot → enter UEFI/BIOS (F2, F12, or Del) → Security → Secure Boot → <strong>Disabled</strong>. 90% of ML developers do this.</p>
+<h3 id="option-b-mok-key-enrollment">Option B — MOK Key Enrollment<a class="headerlink" href="#option-b-mok-key-enrollment" title="Permanent link">&para;</a></h3>
+<p>Generate a Machine Owner Key pair, sign the NVIDIA kernel module, enroll the public cert in UEFI's MOK database.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-4-1"><span class="c1"># Create directory for keys</span>
+</span><span id="__span-4-2">sudo<span class="w"> </span>mkdir<span class="w"> </span>-p<span class="w"> </span>/var/lib/shim-signed/mok
+</span><span id="__span-4-3"><span class="nb">cd</span><span class="w"> </span>/var/lib/shim-signed/mok
+</span><span id="__span-4-4">
+</span><span id="__span-4-5"><span class="c1"># Generate 2048-bit RSA keypair (valid 10 years)</span>
+</span><span id="__span-4-6">sudo<span class="w"> </span>openssl<span class="w"> </span>req<span class="w"> </span>-new<span class="w"> </span>-x509<span class="w"> </span>-newkey<span class="w"> </span>rsa:2048<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-7"><span class="w">    </span>-keyout<span class="w"> </span>MOK.priv<span class="w"> </span>-out<span class="w"> </span>MOK.pem<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-8"><span class="w">    </span>-days<span class="w"> </span><span class="m">3650</span><span class="w"> </span>-subj<span class="w"> </span><span class="s2">&quot;/CN=MOK Signing Key/&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-4-9"><span class="w">    </span>-nodes
+</span><span id="__span-4-10">
+</span><span id="__span-4-11"><span class="c1"># Convert to DER format (required by mokutil)</span>
+</span><span id="__span-4-12">sudo<span class="w"> </span>openssl<span class="w"> </span>x509<span class="w"> </span>-in<span class="w"> </span>MOK.pem<span class="w"> </span>-out<span class="w"> </span>MOK.der<span class="w"> </span>-outform<span class="w"> </span>DER
+</span><span id="__span-4-13">
+</span><span id="__span-4-14"><span class="c1"># Enroll public cert (will prompt for a one-time password)</span>
+</span><span id="__span-4-15">sudo<span class="w"> </span>mokutil<span class="w"> </span>--import<span class="w"> </span>MOK.der
+</span><span id="__span-4-16">
+</span><span id="__span-4-17"><span class="c1"># Reboot — UEFI MokManager will appear, choose &quot;Enroll MOK&quot;</span>
+</span><span id="__span-4-18">sudo<span class="w"> </span>reboot
+</span><span id="__span-4-19">
+</span><span id="__span-4-20"><span class="c1"># After reboot: verify key enrolled</span>
+</span><span id="__span-4-21">mokutil<span class="w"> </span>--list-enrolled<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-A2<span class="w"> </span><span class="s2">&quot;MOK Signing&quot;</span>
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-5-1"><span class="c1"># Sign each NVIDIA kernel module (run after driver install)</span>
+</span><span id="__span-5-2"><span class="k">for</span><span class="w"> </span>module<span class="w"> </span><span class="k">in</span><span class="w"> </span>nvidia<span class="w"> </span>nvidia_modeset<span class="w"> </span>nvidia_uvm<span class="w"> </span>nvidia_drm<span class="p">;</span><span class="w"> </span><span class="k">do</span>
+</span><span id="__span-5-3"><span class="w">    </span>sudo<span class="w"> </span>/usr/src/linux-headers-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>/scripts/sign-file<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-4"><span class="w">      </span>sha256<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-5"><span class="w">      </span>/var/lib/shim-signed/mok/MOK.priv<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-6"><span class="w">      </span>/var/lib/shim-signed/mok/MOK.pem<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-5-7"><span class="w">      </span><span class="k">$(</span>modinfo<span class="w"> </span>-n<span class="w"> </span><span class="nv">$module</span><span class="k">)</span>
+</span><span id="__span-5-8"><span class="k">done</span>
+</span><span id="__span-5-9">
+</span><span id="__span-5-10"><span class="c1"># Verify signing</span>
+</span><span id="__span-5-11">modinfo<span class="w"> </span>nvidia<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;signer&quot;</span>
+</span></code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Known 2025 issue:</strong> Some kernels compress modules as <code>.ko.zst</code>. The sign script expects <code>.ko</code>. If you get "file not found" errors: <code>sudo zstd -d module.ko.zst</code>, sign, re-compress.</p>
+</blockquote>
+<hr />
+<h2 id="driver-installation">Driver Installation<a class="headerlink" href="#driver-installation" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>🚫 <strong>Rule #1:</strong> Pick exactly ONE installation method. Mixing methods (apt + runfile, or PPA + official repo) will break your system.</p>
+</blockquote>
+<h3 id="nvidia-drivers">NVIDIA Drivers<a class="headerlink" href="#nvidia-drivers" title="Permanent link">&para;</a></h3>
+<h4 id="method-a-ubuntu-drivers-recommended">Method A — ubuntu-drivers (Recommended)<a class="headerlink" href="#method-a-ubuntu-drivers-recommended" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-6-1"><span class="c1"># Update packages</span>
+</span><span id="__span-6-2">sudo<span class="w"> </span>apt<span class="w"> </span>update<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>apt<span class="w"> </span>upgrade<span class="w"> </span>-y
+</span><span id="__span-6-3">
+</span><span id="__span-6-4"><span class="c1"># Install kernel headers</span>
+</span><span id="__span-6-5">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>linux-headers-<span class="k">$(</span>uname<span class="w"> </span>-r<span class="k">)</span>
+</span><span id="__span-6-6">
+</span><span id="__span-6-7"><span class="c1"># See what ubuntu-drivers recommends</span>
+</span><span id="__span-6-8">ubuntu-drivers<span class="w"> </span>devices
+</span><span id="__span-6-9">
+</span><span id="__span-6-10"><span class="c1"># Auto-install recommended driver</span>
+</span><span id="__span-6-11">sudo<span class="w"> </span>ubuntu-drivers<span class="w"> </span>install
+</span><span id="__span-6-12">
+</span><span id="__span-6-13"><span class="c1"># OR install specific version (e.g., 570)</span>
+</span><span id="__span-6-14">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvidia-driver-570
+</span><span id="__span-6-15">
+</span><span id="__span-6-16"><span class="c1"># Reboot — mandatory</span>
+</span><span id="__span-6-17">sudo<span class="w"> </span>reboot
+</span></code></pre></div>
+<h4 id="method-b-official-nvidia-network-repository">Method B — Official NVIDIA Network Repository<a class="headerlink" href="#method-b-official-nvidia-network-repository" title="Permanent link">&para;</a></h4>
+<p>Use when you need a very specific driver version or ubuntu-drivers doesn't find your GPU (new hardware).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-7-1"><span class="c1"># Add NVIDIA&#39;s keyring and repository</span>
+</span><span id="__span-7-2">wget<span class="w"> </span>-q<span class="w"> </span>https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2404/x86_64/cuda-keyring_1.1-1_all.deb
+</span><span id="__span-7-3">sudo<span class="w"> </span>dpkg<span class="w"> </span>-i<span class="w"> </span>cuda-keyring_1.1-1_all.deb
+</span><span id="__span-7-4">sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span><span id="__span-7-5">
+</span><span id="__span-7-6"><span class="c1"># Install driver (also pulls CUDA)</span>
+</span><span id="__span-7-7">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>cuda-drivers
+</span><span id="__span-7-8">
+</span><span id="__span-7-9"><span class="c1"># OR driver-only (open-source kernel modules)</span>
+</span><span id="__span-7-10">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvidia-open-570
+</span><span id="__span-7-11">
+</span><span id="__span-7-12">sudo<span class="w"> </span>reboot
+</span></code></pre></div>
+<blockquote>
+<p>💡 As of driver 515+, NVIDIA ships <strong>open-source kernel modules</strong> (<code>nvidia-open</code>) alongside proprietary ones. Preferred on Turing/RTX 2000+ architecture. Not the same as <code>nouveau</code>.</p>
+</blockquote>
+<h4 id="blacklist-nouveau">Blacklist Nouveau<a class="headerlink" href="#blacklist-nouveau" title="Permanent link">&para;</a></h4>
+<p>Only necessary if <code>ubuntu-drivers</code> didn't do it automatically.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-8-1"><span class="c1"># Check if nouveau is loaded</span>
+</span><span id="__span-8-2">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nouveau
+</span><span id="__span-8-3">
+</span><span id="__span-8-4"><span class="c1"># If it appears, blacklist it</span>
+</span><span id="__span-8-5"><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;blacklist nouveau\noptions nouveau modeset=0&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-8-6"><span class="w">    </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/blacklist-nouveau.conf
+</span><span id="__span-8-7">
+</span><span id="__span-8-8">sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u
+</span><span id="__span-8-9">sudo<span class="w"> </span>reboot
+</span><span id="__span-8-10">
+</span><span id="__span-8-11"><span class="c1"># Verify nouveau is gone (should return nothing)</span>
+</span><span id="__span-8-12">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nouveau
+</span></code></pre></div>
+<h4 id="verify-nvidia-driver">Verify NVIDIA Driver<a class="headerlink" href="#verify-nvidia-driver" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-9-1">nvidia-smi
+</span><span id="__span-9-2"><span class="c1"># Expected: shows driver version, CUDA Version, GPU name and VRAM usage</span>
+</span><span id="__span-9-3">
+</span><span id="__span-9-4">cat<span class="w"> </span>/proc/driver/nvidia/version
+</span></code></pre></div>
+<h4 id="fedora-rpm-fusion-method">Fedora — RPM Fusion Method<a class="headerlink" href="#fedora-rpm-fusion-method" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-10-1"><span class="c1"># Enable RPM Fusion</span>
+</span><span id="__span-10-2">sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-3"><span class="w">    </span>https://mirrors.rpmfusion.org/free/fedora/rpmfusion-free-release-<span class="k">$(</span>rpm<span class="w"> </span>-E<span class="w"> </span>%fedora<span class="k">)</span>.noarch.rpm<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-10-4"><span class="w">    </span>https://mirrors.rpmfusion.org/nonfree/fedora/rpmfusion-nonfree-release-<span class="k">$(</span>rpm<span class="w"> </span>-E<span class="w"> </span>%fedora<span class="k">)</span>.noarch.rpm
+</span><span id="__span-10-5">
+</span><span id="__span-10-6"><span class="c1"># Install NVIDIA driver</span>
+</span><span id="__span-10-7">sudo<span class="w"> </span>dnf<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>akmod-nvidia<span class="w"> </span>xorg-x11-drv-nvidia-cuda
+</span><span id="__span-10-8">
+</span><span id="__span-10-9"><span class="c1"># Wait for kernel module build (~5 min)</span>
+</span><span id="__span-10-10">sudo<span class="w"> </span>akmods<span class="w"> </span>--force
+</span><span id="__span-10-11">sudo<span class="w"> </span>reboot
+</span></code></pre></div>
+<h3 id="amd-drivers">AMD Drivers<a class="headerlink" href="#amd-drivers" title="Permanent link">&para;</a></h3>
+<p>The <code>amdgpu</code> open-source driver is built into the Linux kernel — your GPU will display fine without ROCm. ROCm is only needed for ML compute.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-11-1"><span class="c1"># amdgpu should load by default on GCN 3.0+ GPUs</span>
+</span><span id="__span-11-2">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>amdgpu
+</span><span id="__span-11-3">dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>amdgpu<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-20
+</span></code></pre></div>
+<h4 id="rocm-installation-ubuntu-2404">ROCm Installation (Ubuntu 24.04)<a class="headerlink" href="#rocm-installation-ubuntu-2404" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-12-1"><span class="c1"># Install prerequisites</span>
+</span><span id="__span-12-2">sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span><span id="__span-12-3">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>wget<span class="w"> </span>gpg
+</span><span id="__span-12-4">
+</span><span id="__span-12-5"><span class="c1"># Add AMD ROCm repo key</span>
+</span><span id="__span-12-6">wget<span class="w"> </span>-q<span class="w"> </span>-O<span class="w"> </span>-<span class="w"> </span>https://repo.radeon.com/rocm/rocm.gpg.key<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-12-7"><span class="w">    </span><span class="p">|</span><span class="w"> </span>gpg<span class="w"> </span>--dearmor<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-12-8"><span class="w">    </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/keyrings/rocm.gpg<span class="w"> </span>&gt;<span class="w"> </span>/dev/null
+</span><span id="__span-12-9">
+</span><span id="__span-12-10"><span class="c1"># Add ROCm 7.x repository</span>
+</span><span id="__span-12-11"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;deb [arch=amd64 signed-by=/etc/apt/keyrings/rocm.gpg] \</span>
+</span><span id="__span-12-12"><span class="s2">    https://repo.radeon.com/rocm/apt/7.1.1 noble main&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-12-13"><span class="w">    </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/apt/sources.list.d/rocm.list
+</span><span id="__span-12-14">
+</span><span id="__span-12-15">sudo<span class="w"> </span>apt<span class="w"> </span>update
+</span><span id="__span-12-16">
+</span><span id="__span-12-17"><span class="c1"># Install ROCm compute stack</span>
+</span><span id="__span-12-18">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>rocm-hip-sdk<span class="w"> </span>rocm-dkms
+</span><span id="__span-12-19">
+</span><span id="__span-12-20"><span class="c1"># Add your user to render and video groups</span>
+</span><span id="__span-12-21">sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>render,video<span class="w"> </span><span class="nv">$USER</span>
+</span><span id="__span-12-22">
+</span><span id="__span-12-23">sudo<span class="w"> </span>reboot
+</span></code></pre></div>
+<h4 id="verify-rocm">Verify ROCm<a class="headerlink" href="#verify-rocm" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-13-1">rocm-smi<span class="w">         </span><span class="c1"># GPU status (like nvidia-smi for AMD)</span>
+</span><span id="__span-13-2">rocminfo<span class="w">         </span><span class="c1"># detailed hardware info</span>
+</span><span id="__span-13-3">ls<span class="w"> </span>/dev/kfd<span class="w"> </span>/dev/dri<span class="w">   </span><span class="c1"># both must exist</span>
+</span></code></pre></div>
+<blockquote>
+<p>⚠️ <strong>AMD GPU Compatibility:</strong> ROCm officially supports RX 6000 (RDNA 2), RX 7000 (RDNA 3), RX 9000 (RDNA 4), and MI series. Older GPUs have community support only. Always verify your GPU on the <a href="https://rocm.docs.amd.com/en/latest/compatibility/compatibility-matrix.html">official compatibility matrix</a>.</p>
+</blockquote>
+<hr />
+<h2 id="cuda-toolkit-rocm-sdk">CUDA Toolkit &amp; ROCm SDK<a class="headerlink" href="#cuda-toolkit-rocm-sdk" title="Permanent link">&para;</a></h2>
+<h3 id="nvidia-cuda-13x">NVIDIA — CUDA 13.x<a class="headerlink" href="#nvidia-cuda-13x" title="Permanent link">&para;</a></h3>
+<blockquote>
+<p>💡 Modern PyTorch (2.6+) bundles its own CUDA runtime inside the pip wheel. You only need the NVIDIA <strong>driver</strong> for PyTorch inference. Install the full CUDA Toolkit only if you plan to compile custom CUDA kernels, use <code>nvcc</code>, or build llama.cpp from source.</p>
+</blockquote>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-14-1"><span class="c1"># Install CUDA Toolkit 13.2 (assumes NVIDIA repo added in driver step)</span>
+</span><span id="__span-14-2">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>cuda-toolkit-13-2
+</span></code></pre></div>
+<h4 id="add-cuda-to-path">Add CUDA to PATH<a class="headerlink" href="#add-cuda-to-path" title="Permanent link">&para;</a></h4>
+<p>Add to <code>~/.bashrc</code> or <code>~/.zshrc</code>:</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-15-1"><span class="nb">export</span><span class="w"> </span><span class="nv">PATH</span><span class="o">=</span>/usr/local/cuda/bin:<span class="nv">$PATH</span>
+</span><span id="__span-15-2"><span class="nb">export</span><span class="w"> </span><span class="nv">LD_LIBRARY_PATH</span><span class="o">=</span>/usr/local/cuda/lib64:<span class="nv">$LD_LIBRARY_PATH</span>
+</span></code></pre></div>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-16-1"><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</span><span id="__span-16-2">
+</span><span id="__span-16-3"><span class="c1"># Verify</span>
+</span><span id="__span-16-4">nvcc<span class="w"> </span>--version
+</span><span id="__span-16-5">nvidia-smi<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;CUDA Version&quot;</span>
+</span></code></pre></div>
+<h4 id="cuda-version-compatibility">CUDA Version Compatibility<a class="headerlink" href="#cuda-version-compatibility" title="Permanent link">&para;</a></h4>
+<table>
+<thead>
+<tr>
+<th>CUDA Version</th>
+<th>Min Driver (Linux)</th>
+<th>PyTorch Wheel</th>
+<th>Status</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>13.2</td>
+<td>570.00+</td>
+<td>cu132</td>
+<td>✅ Current</td>
+</tr>
+<tr>
+<td>12.9</td>
+<td>550.00+</td>
+<td>cu129</td>
+<td>✅ Stable</td>
+</tr>
+<tr>
+<td>12.4</td>
+<td>525.85+</td>
+<td>cu124</td>
+<td>⚠️ Aging</td>
+</tr>
+<tr>
+<td>12.1</td>
+<td>525.85+</td>
+<td>cu121</td>
+<td>⚠️ Legacy</td>
+</tr>
+<tr>
+<td>11.8</td>
+<td>450.80+</td>
+<td>cu118</td>
+<td>❌ EOL</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>Rule: CUDA version in the PyTorch wheel must be ≤ your driver's max CUDA version (shown top-right in <code>nvidia-smi</code>).</p>
+</blockquote>
+<h3 id="amd-rocm-7x">AMD — ROCm 7.x<a class="headerlink" href="#amd-rocm-7x" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-17-1"><span class="c1"># Check installed ROCm version</span>
+</span><span id="__span-17-2">cat<span class="w"> </span>/opt/rocm/lib/rocm_version
+</span><span id="__span-17-3">hipcc<span class="w"> </span>--version<span class="w">    </span><span class="c1"># HIP compiler (ROCm&#39;s CUDA equivalent)</span>
+</span><span id="__span-17-4">
+</span><span id="__span-17-5"><span class="c1"># Check your GPU architecture target</span>
+</span><span id="__span-17-6">rocminfo<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;gfx&quot;</span>
+</span><span id="__span-17-7"><span class="c1"># gfx1100 = RX 7900 XTX (RDNA 3)</span>
+</span><span id="__span-17-8"><span class="c1"># gfx1030 = RX 6800 XT (RDNA 2)</span>
+</span><span id="__span-17-9"><span class="c1"># gfx942  = MI300X (data center)</span>
+</span><span id="__span-17-10"><span class="c1"># gfx1201 = RX 9070 XT (RDNA 4)</span>
+</span></code></pre></div>
+<h4 id="docker-fastest-rocm-onramp">Docker — Fastest ROCm Onramp<a class="headerlink" href="#docker-fastest-rocm-onramp" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-18-1"><span class="c1"># Install Docker</span>
+</span><span id="__span-18-2">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>docker.io
+</span><span id="__span-18-3">sudo<span class="w"> </span>usermod<span class="w"> </span>-aG<span class="w"> </span>docker<span class="w"> </span><span class="nv">$USER</span>
+</span><span id="__span-18-4">
+</span><span id="__span-18-5"><span class="c1"># Pull official AMD ROCm + PyTorch image</span>
+</span><span id="__span-18-6">docker<span class="w"> </span>pull<span class="w"> </span>rocm/pytorch:rocm7.1.1_ubuntu22.04_py3.11_pytorch_2.9
+</span><span id="__span-18-7">
+</span><span id="__span-18-8"><span class="c1"># Run with GPU access</span>
+</span><span id="__span-18-9">docker<span class="w"> </span>run<span class="w"> </span>-it<span class="w"> </span>--device<span class="o">=</span>/dev/kfd<span class="w"> </span>--device<span class="o">=</span>/dev/dri<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-18-10"><span class="w">    </span>--group-add<span class="w"> </span>render<span class="w"> </span>--group-add<span class="w"> </span>video<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-18-11"><span class="w">    </span>-v<span class="w"> </span><span class="k">$(</span><span class="nb">pwd</span><span class="k">)</span>:/workspace<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-18-12"><span class="w">    </span>rocm/pytorch:rocm7.1.1_ubuntu22.04_py3.11_pytorch_2.9<span class="w"> </span>bash
+</span><span id="__span-18-13">
+</span><span id="__span-18-14"><span class="c1"># Inside container — verify</span>
+</span><span id="__span-18-15">python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import torch; print(torch.cuda.is_available())&quot;</span>
+</span></code></pre></div>
+<hr />
+<h2 id="laptop-hybrid-graphics-optimus">Laptop Hybrid Graphics (Optimus)<a class="headerlink" href="#laptop-hybrid-graphics-optimus" title="Permanent link">&para;</a></h2>
+<p>If your laptop has both an Intel/AMD iGPU and a discrete NVIDIA GPU, you have Optimus. Symptom: <code>nvidia-smi</code> works but Python can't see the GPU.</p>
+<h3 id="optimus-modes">Optimus Modes<a class="headerlink" href="#optimus-modes" title="Permanent link">&para;</a></h3>
+<table>
+<thead>
+<tr>
+<th>Mode</th>
+<th>What runs on NVIDIA</th>
+<th>Power</th>
+<th>Best for</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Hybrid (default)</td>
+<td>Apps launched with <code>prime-run</code></td>
+<td>Low</td>
+<td>Battery life + occasional GPU use</td>
+</tr>
+<tr>
+<td>NVIDIA only</td>
+<td>Everything</td>
+<td>High</td>
+<td>Sustained ML training sessions</td>
+</tr>
+<tr>
+<td>iGPU only</td>
+<td>Nothing</td>
+<td>Very low</td>
+<td>Travel, no ML needed</td>
+</tr>
+</tbody>
+</table>
+<h3 id="prime-select-ubuntudebian">prime-select (Ubuntu/Debian)<a class="headerlink" href="#prime-select-ubuntudebian" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-19-1"><span class="c1"># Install nvidia-prime</span>
+</span><span id="__span-19-2">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvidia-prime
+</span><span id="__span-19-3">
+</span><span id="__span-19-4"><span class="c1"># Check current mode</span>
+</span><span id="__span-19-5">prime-select<span class="w"> </span>query
+</span><span id="__span-19-6">
+</span><span id="__span-19-7"><span class="c1"># Switch to NVIDIA-only (needs reboot)</span>
+</span><span id="__span-19-8">sudo<span class="w"> </span>prime-select<span class="w"> </span>nvidia
+</span><span id="__span-19-9">sudo<span class="w"> </span>reboot
+</span><span id="__span-19-10">
+</span><span id="__span-19-11"><span class="c1"># Switch back to hybrid</span>
+</span><span id="__span-19-12">sudo<span class="w"> </span>prime-select<span class="w"> </span>on-demand
+</span><span id="__span-19-13">sudo<span class="w"> </span>reboot
+</span><span id="__span-19-14">
+</span><span id="__span-19-15"><span class="c1"># In on-demand mode: prefix commands with prime-run</span>
+</span><span id="__span-19-16">prime-run<span class="w"> </span>python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import torch; print(torch.cuda.device_count())&quot;</span>
+</span></code></pre></div>
+<h3 id="cuda_visible_devices-per-command-gpu-control">CUDA_VISIBLE_DEVICES — Per-command GPU Control<a class="headerlink" href="#cuda_visible_devices-per-command-gpu-control" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-20-1"><span class="c1"># Force specific GPU for a single command</span>
+</span><span id="__span-20-2"><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span><span class="w"> </span>python3<span class="w"> </span>my_script.py
+</span><span id="__span-20-3">
+</span><span id="__span-20-4"><span class="c1"># Use all GPUs</span>
+</span><span id="__span-20-5"><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="m">0</span>,1<span class="w"> </span>python3<span class="w"> </span>multi_gpu_script.py
+</span><span id="__span-20-6">
+</span><span id="__span-20-7"><span class="c1"># CPU-only mode</span>
+</span><span id="__span-20-8"><span class="nv">CUDA_VISIBLE_DEVICES</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="w"> </span>python3<span class="w"> </span>my_script.py
+</span></code></pre></div>
+<blockquote>
+<p>⚠️ <strong>Optimus + HDMI/DisplayPort:</strong> On many laptops, external display ports are wired to the iGPU. In NVIDIA-only mode you may lose your external display. Hybrid mode is usually better for a docked ML workstation setup.</p>
+</blockquote>
+<hr />
+<h2 id="python-environment-setup">Python Environment Setup<a class="headerlink" href="#python-environment-setup" title="Permanent link">&para;</a></h2>
+<p>Never install ML packages into the system Python. Always use isolated environments.</p>
+<h3 id="mamba-recommended-for-gpuml">Mamba (Recommended for GPU/ML)<a class="headerlink" href="#mamba-recommended-for-gpuml" title="Permanent link">&para;</a></h3>
+<p>Mamba solves environments in seconds vs conda's 3–4 minutes. Better for GPU stacks with native dependencies.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-21-1"><span class="c1"># Download Miniforge (conda + mamba, free license)</span>
+</span><span id="__span-21-2">wget<span class="w"> </span>https://github.com/conda-forge/miniforge/releases/latest/download/Miniforge3-Linux-x86_64.sh
+</span><span id="__span-21-3">bash<span class="w"> </span>Miniforge3-Linux-x86_64.sh<span class="w"> </span>-b<span class="w"> </span>-p<span class="w"> </span><span class="nv">$HOME</span>/miniforge3
+</span><span id="__span-21-4">
+</span><span id="__span-21-5"><span class="c1"># Init shell integration</span>
+</span><span id="__span-21-6">~/miniforge3/bin/conda<span class="w"> </span>init<span class="w"> </span>bash<span class="w">   </span><span class="c1"># or zsh, fish</span>
+</span><span id="__span-21-7"><span class="nb">source</span><span class="w"> </span>~/.bashrc
+</span><span id="__span-21-8">
+</span><span id="__span-21-9"><span class="c1"># Verify</span>
+</span><span id="__span-21-10">mamba<span class="w"> </span>--version
+</span></code></pre></div>
+<h4 id="create-a-gpu-ml-environment">Create a GPU ML Environment<a class="headerlink" href="#create-a-gpu-ml-environment" title="Permanent link">&para;</a></h4>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-22-1"><span class="c1"># Create environment with Python 3.11</span>
+</span><span id="__span-22-2">mamba<span class="w"> </span>create<span class="w"> </span>-n<span class="w"> </span>ml<span class="w"> </span><span class="nv">python</span><span class="o">=</span><span class="m">3</span>.11<span class="w"> </span>-y
+</span><span id="__span-22-3">mamba<span class="w"> </span>activate<span class="w"> </span>ml
+</span><span id="__span-22-4">pip<span class="w"> </span>install<span class="w"> </span>--upgrade<span class="w"> </span>pip
+</span></code></pre></div>
+<h3 id="venv-pip-lightweight-alternative">venv + pip (Lightweight Alternative)<a class="headerlink" href="#venv-pip-lightweight-alternative" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-23-1">python3<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>~/.venvs/ml
+</span><span id="__span-23-2"><span class="nb">source</span><span class="w"> </span>~/.venvs/ml/bin/activate
+</span><span id="__span-23-3">
+</span><span id="__span-23-4"><span class="c1"># Easy alias</span>
+</span><span id="__span-23-5"><span class="nb">echo</span><span class="w"> </span><span class="s1">&#39;alias mlenv=&quot;source ~/.venvs/ml/bin/activate&quot;&#39;</span><span class="w"> </span>&gt;&gt;<span class="w"> </span>~/.bashrc
+</span></code></pre></div>
+<blockquote>
+<p>💡 Use mamba for GPU-heavy or LLM-related work. Use venv+pip for lightweight pure-Python projects.</p>
+</blockquote>
+<hr />
+<h2 id="pytorch-gpu-installation">PyTorch — GPU Installation<a class="headerlink" href="#pytorch-gpu-installation" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>⚠️ Since PyTorch 2.6.0 (late 2024), <strong>conda install pytorch is discontinued</strong>. Use pip. PyTorch wheels bundle their own CUDA runtime — you only need a compatible NVIDIA driver, not the full CUDA Toolkit.</p>
+</blockquote>
+<h3 id="nvidia-cuda">NVIDIA (CUDA)<a class="headerlink" href="#nvidia-cuda" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-24-1"><span class="c1"># Activate your environment first</span>
+</span><span id="__span-24-2">mamba<span class="w"> </span>activate<span class="w"> </span>ml
+</span><span id="__span-24-3">
+</span><span id="__span-24-4"><span class="c1"># PyTorch 2.9 + CUDA 12.9 (bundled runtime — recommended stable)</span>
+</span><span id="__span-24-5">pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-6"><span class="w">    </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu129
+</span><span id="__span-24-7">
+</span><span id="__span-24-8"><span class="c1"># Or CUDA 13.2 (requires driver 570+)</span>
+</span><span id="__span-24-9">pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-24-10"><span class="w">    </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu132
+</span></code></pre></div>
+<blockquote>
+<p>💡 Not sure which wheel? Run <code>nvidia-smi</code> and look at "CUDA Version" top-right. Pick a wheel version ≤ that number. When in doubt, <code>cu129</code> is safest.</p>
+</blockquote>
+<h3 id="amd-rocm">AMD (ROCm)<a class="headerlink" href="#amd-rocm" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-25-1"><span class="c1"># AMD-hosted wheels (recommended by AMD)</span>
+</span><span id="__span-25-2">pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-25-3"><span class="w">    </span>--index-url<span class="w"> </span>https://repo.radeon.com/rocm/manylinux/rocm-rel-7.1/
+</span><span id="__span-25-4">
+</span><span id="__span-25-5"><span class="c1"># Or PyTorch.org ROCm wheel</span>
+</span><span id="__span-25-6">pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-25-7"><span class="w">    </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/rocm7.1
+</span></code></pre></div>
+<h3 id="verify-gpu">Verify GPU<a class="headerlink" href="#verify-gpu" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-26-1"><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-26-2">
+</span><span id="__span-26-3"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PyTorch version: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">__version__</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-4"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CUDA available:  </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-5"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;CUDA version:    </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">cuda</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-6"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GPU count:       </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">device_count</span><span class="p">()</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-7">
+</span><span id="__span-26-8"><span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">is_available</span><span class="p">():</span>
+</span><span id="__span-26-9">    <span class="n">gpu</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">get_device_properties</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+</span><span id="__span-26-10">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;GPU name: </span><span class="si">{</span><span class="n">gpu</span><span class="o">.</span><span class="n">name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span><span id="__span-26-11">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;VRAM:     </span><span class="si">{</span><span class="n">gpu</span><span class="o">.</span><span class="n">total_memory</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+</span><span id="__span-26-12">
+</span><span id="__span-26-13">    <span class="c1"># Actual compute test</span>
+</span><span id="__span-26-14">    <span class="n">a</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4096</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+</span><span id="__span-26-15">    <span class="n">b</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">4096</span><span class="p">,</span> <span class="mi">4096</span><span class="p">,</span> <span class="n">device</span><span class="o">=</span><span class="s1">&#39;cuda&#39;</span><span class="p">)</span>
+</span><span id="__span-26-16">    <span class="n">c</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">matmul</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+</span><span id="__span-26-17">    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Matrix multiply OK — shape: </span><span class="si">{</span><span class="n">c</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="core-ml-libraries">Core ML Libraries<a class="headerlink" href="#core-ml-libraries" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-27-1"><span class="c1"># Hugging Face ecosystem</span>
+</span><span id="__span-27-2">pip<span class="w"> </span>install<span class="w"> </span>transformers<span class="w"> </span>accelerate<span class="w"> </span>datasets<span class="w"> </span>huggingface_hub
+</span><span id="__span-27-3">
+</span><span id="__span-27-4"><span class="c1"># Quantization (run large models in less VRAM)</span>
+</span><span id="__span-27-5">pip<span class="w"> </span>install<span class="w"> </span>bitsandbytes<span class="w">   </span><span class="c1"># 4-bit/8-bit quantization (NVIDIA only)</span>
+</span><span id="__span-27-6">pip<span class="w"> </span>install<span class="w"> </span>auto-gptq<span class="w">      </span><span class="c1"># GPTQ quantized model support</span>
+</span><span id="__span-27-7">
+</span><span id="__span-27-8"><span class="c1"># Fine-tuning</span>
+</span><span id="__span-27-9">pip<span class="w"> </span>install<span class="w"> </span>peft<span class="w"> </span>trl<span class="w">       </span><span class="c1"># LoRA/QLoRA + RLHF tooling</span>
+</span><span id="__span-27-10">
+</span><span id="__span-27-11"><span class="c1"># Utilities</span>
+</span><span id="__span-27-12">pip<span class="w"> </span>install<span class="w"> </span>numpy<span class="w"> </span>scipy<span class="w"> </span>scikit-learn<span class="w"> </span>matplotlib<span class="w"> </span>jupyterlab
+</span></code></pre></div>
+<hr />
+<h2 id="llm-inference-frameworks">LLM Inference Frameworks<a class="headerlink" href="#llm-inference-frameworks" title="Permanent link">&para;</a></h2>
+<h3 id="ollama-easiest-setup">Ollama — Easiest Setup<a class="headerlink" href="#ollama-easiest-setup" title="Permanent link">&para;</a></h3>
+<p>One-liner install, auto-detects GPU, huge model library, OpenAI-compatible API on port 11434.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-28-1"><span class="c1"># Install</span>
+</span><span id="__span-28-2">curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span><span id="__span-28-3">
+</span><span id="__span-28-4"><span class="c1"># Pull and run models</span>
+</span><span id="__span-28-5">ollama<span class="w"> </span>pull<span class="w"> </span>llama3.2<span class="w">            </span><span class="c1"># 3B — fast, fits any GPU</span>
+</span><span id="__span-28-6">ollama<span class="w"> </span>pull<span class="w"> </span>qwen2.5-coder:14b<span class="w">   </span><span class="c1"># 14B — needs ~10 GB VRAM</span>
+</span><span id="__span-28-7">ollama<span class="w"> </span>pull<span class="w"> </span>qwen3:30b-a3b<span class="w">       </span><span class="c1"># 30B MoE — ~17 GB VRAM</span>
+</span><span id="__span-28-8">
+</span><span id="__span-28-9"><span class="c1"># Run interactively</span>
+</span><span id="__span-28-10">ollama<span class="w"> </span>run<span class="w"> </span>llama3.2
+</span><span id="__span-28-11">
+</span><span id="__span-28-12"><span class="c1"># Check GPU layer count</span>
+</span><span id="__span-28-13">ollama<span class="w"> </span>run<span class="w"> </span>llama3.2<span class="w"> </span>--verbose<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;gpu layers&quot;</span>
+</span><span id="__span-28-14">
+</span><span id="__span-28-15"><span class="c1"># Force all layers to GPU</span>
+</span><span id="__span-28-16"><span class="nv">OLLAMA_NUM_GPU</span><span class="o">=</span><span class="m">99</span><span class="w"> </span>ollama<span class="w"> </span>run<span class="w"> </span>qwen2.5-coder:14b
+</span><span id="__span-28-17">
+</span><span id="__span-28-18"><span class="c1"># OpenAI-compatible API</span>
+</span><span id="__span-28-19">curl<span class="w"> </span>http://localhost:11434/v1/chat/completions<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-28-20"><span class="w">  </span>-H<span class="w"> </span><span class="s2">&quot;Content-Type: application/json&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-28-21"><span class="w">  </span>-d<span class="w"> </span><span class="s1">&#39;{&quot;model&quot;:&quot;llama3.2&quot;,&quot;messages&quot;:[{&quot;role&quot;:&quot;user&quot;,&quot;content&quot;:&quot;Hello&quot;}]}&#39;</span>
+</span></code></pre></div>
+<h3 id="llamacpp-most-flexible">llama.cpp — Most Flexible<a class="headerlink" href="#llamacpp-most-flexible" title="Permanent link">&para;</a></h3>
+<p>Build with CUDA/ROCm/Vulkan, supports every GGUF model, layer offloading (split across GPU+CPU).</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-29-1"><span class="c1"># Install build deps</span>
+</span><span id="__span-29-2">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>build-essential<span class="w"> </span>cmake<span class="w"> </span>git
+</span><span id="__span-29-3">
+</span><span id="__span-29-4"><span class="c1"># Clone and build with CUDA</span>
+</span><span id="__span-29-5">git<span class="w"> </span>clone<span class="w"> </span>https://github.com/ggml-org/llama.cpp
+</span><span id="__span-29-6"><span class="nb">cd</span><span class="w"> </span>llama.cpp
+</span><span id="__span-29-7">cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DGGML_CUDA<span class="o">=</span>ON<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+</span><span id="__span-29-8">cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</span><span id="__span-29-9">
+</span><span id="__span-29-10"><span class="c1"># For AMD ROCm instead</span>
+</span><span id="__span-29-11">cmake<span class="w"> </span>-B<span class="w"> </span>build<span class="w"> </span>-DGGML_HIPBLAS<span class="o">=</span>ON<span class="w"> </span>-DCMAKE_BUILD_TYPE<span class="o">=</span>Release
+</span><span id="__span-29-12">cmake<span class="w"> </span>--build<span class="w"> </span>build<span class="w"> </span>--config<span class="w"> </span>Release<span class="w"> </span>-j<span class="k">$(</span>nproc<span class="k">)</span>
+</span><span id="__span-29-13">
+</span><span id="__span-29-14"><span class="c1"># Download a GGUF model</span>
+</span><span id="__span-29-15">pip<span class="w"> </span>install<span class="w"> </span>huggingface_hub
+</span><span id="__span-29-16">python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span id="__span-29-17"><span class="s2">from huggingface_hub import hf_hub_download</span>
+</span><span id="__span-29-18"><span class="s2">hf_hub_download(&#39;bartowski/Qwen2.5-Coder-14B-Instruct-GGUF&#39;,</span>
+</span><span id="__span-29-19"><span class="s2">  &#39;Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf&#39;, local_dir=&#39;./models&#39;)</span>
+</span><span id="__span-29-20"><span class="s2">&quot;</span>
+</span><span id="__span-29-21">
+</span><span id="__span-29-22"><span class="c1"># Run with all layers on GPU (-ngl -1 = all layers)</span>
+</span><span id="__span-29-23">./build/bin/llama-cli<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-29-24"><span class="w">  </span>-m<span class="w"> </span>./models/Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-29-25"><span class="w">  </span>-ngl<span class="w"> </span>-1<span class="w"> </span>-c<span class="w"> </span><span class="m">4096</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-29-26"><span class="w">  </span>-p<span class="w"> </span><span class="s2">&quot;Write a Python function to sort a list&quot;</span>
+</span><span id="__span-29-27">
+</span><span id="__span-29-28"><span class="c1"># Start as OpenAI-compatible server</span>
+</span><span id="__span-29-29">./build/bin/llama-server<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-29-30"><span class="w">  </span>-m<span class="w"> </span>./models/Qwen2.5-Coder-14B-Instruct-Q4_K_M.gguf<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-29-31"><span class="w">  </span>-ngl<span class="w"> </span>-1<span class="w"> </span>--port<span class="w"> </span><span class="m">8080</span>
+</span></code></pre></div>
+<h3 id="vllm-production-throughput">vLLM — Production Throughput<a class="headerlink" href="#vllm-production-throughput" title="Permanent link">&para;</a></h3>
+<p>PagedAttention for high-throughput inference, continuous batching. Requires Hugging Face models (not GGUF). Minimum ~8 GB VRAM for 7B models.</p>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-30-1"><span class="c1"># Install</span>
+</span><span id="__span-30-2">pip<span class="w"> </span>install<span class="w"> </span>vllm
+</span><span id="__span-30-3">
+</span><span id="__span-30-4"><span class="c1"># Serve a model (OpenAI-compatible on port 8000)</span>
+</span><span id="__span-30-5">python3<span class="w"> </span>-m<span class="w"> </span>vllm.entrypoints.openai.api_server<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-6"><span class="w">  </span>--model<span class="w"> </span>Qwen/Qwen2.5-Coder-7B-Instruct<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-7"><span class="w">  </span>--dtype<span class="w"> </span>auto<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-8"><span class="w">  </span>--max-model-len<span class="w"> </span><span class="m">8192</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-9"><span class="w">  </span>--port<span class="w"> </span><span class="m">8000</span>
+</span><span id="__span-30-10">
+</span><span id="__span-30-11"><span class="c1"># AWQ quantized (lower VRAM)</span>
+</span><span id="__span-30-12">python3<span class="w"> </span>-m<span class="w"> </span>vllm.entrypoints.openai.api_server<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-13"><span class="w">  </span>--model<span class="w"> </span>Qwen/Qwen2.5-Coder-14B-Instruct-AWQ<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-14"><span class="w">  </span>--quantization<span class="w"> </span>awq<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-30-15"><span class="w">  </span>--dtype<span class="w"> </span>half
+</span></code></pre></div>
+<hr />
+<h2 id="gpu-monitoring-tools">GPU Monitoring Tools<a class="headerlink" href="#gpu-monitoring-tools" title="Permanent link">&para;</a></h2>
+<h3 id="nvidia-smi-built-in">nvidia-smi (Built-in)<a class="headerlink" href="#nvidia-smi-built-in" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-31-1"><span class="c1"># Snapshot</span>
+</span><span id="__span-31-2">nvidia-smi
+</span><span id="__span-31-3">
+</span><span id="__span-31-4"><span class="c1"># Live refresh every 0.5 seconds</span>
+</span><span id="__span-31-5">watch<span class="w"> </span>-n<span class="w"> </span><span class="m">0</span>.5<span class="w"> </span>nvidia-smi
+</span><span id="__span-31-6">
+</span><span id="__span-31-7"><span class="c1"># Log to CSV</span>
+</span><span id="__span-31-8">nvidia-smi<span class="w"> </span>--query-gpu<span class="o">=</span>timestamp,name,temperature.gpu,<span class="se">\</span>
+</span><span id="__span-31-9">utilization.gpu,utilization.memory,memory.used,memory.free<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-31-10">--format<span class="o">=</span>csv<span class="w"> </span>-l<span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="p">|</span><span class="w"> </span>tee<span class="w"> </span>gpu_log.csv
+</span></code></pre></div>
+<h3 id="nvtop-htop-for-gpus-nvidia-amd">nvtop — htop for GPUs (NVIDIA + AMD)<a class="headerlink" href="#nvtop-htop-for-gpus-nvidia-amd" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-32-1">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>nvtop
+</span><span id="__span-32-2">nvtop<span class="w">   </span><span class="c1"># F2 for setup, Q to quit</span>
+</span></code></pre></div>
+<h3 id="nvitop-richest-nvidia-ui">nvitop — Richest NVIDIA UI<a class="headerlink" href="#nvitop-richest-nvidia-ui" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-33-1">pip<span class="w"> </span>install<span class="w"> </span>nvitop
+</span><span id="__span-33-2">nvitop<span class="w">                 </span><span class="c1"># full UI</span>
+</span><span id="__span-33-3">nvitop<span class="w"> </span>-m<span class="w"> </span>compact<span class="w">      </span><span class="c1"># compact (good in a tmux pane)</span>
+</span><span id="__span-33-4">
+</span><span id="__span-33-5"><span class="c1"># Use as Python library inside training loop</span>
+</span><span id="__span-33-6">from<span class="w"> </span>nvitop<span class="w"> </span>import<span class="w"> </span>Device
+</span><span id="__span-33-7"><span class="k">for</span><span class="w"> </span>d<span class="w"> </span><span class="k">in</span><span class="w"> </span>Device.all<span class="o">()</span>:
+</span><span id="__span-33-8"><span class="w">    </span>print<span class="o">(</span>d.name<span class="o">()</span>,<span class="w"> </span>d.memory_used_human<span class="o">())</span>
+</span></code></pre></div>
+<h3 id="amd-rocm-smi">AMD — rocm-smi<a class="headerlink" href="#amd-rocm-smi" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-34-1">rocm-smi<span class="w">                  </span><span class="c1"># snapshot</span>
+</span><span id="__span-34-2">watch<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>rocm-smi<span class="w">       </span><span class="c1"># live</span>
+</span><span id="__span-34-3">rocm-smi<span class="w"> </span>--showmeminfo<span class="w"> </span>vram
+</span></code></pre></div>
+<h3 id="tmux-split-pane-monitor-setup">tmux Split-Pane Monitor Setup<a class="headerlink" href="#tmux-split-pane-monitor-setup" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-35-1">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>-y<span class="w"> </span>tmux
+</span><span id="__span-35-2">
+</span><span id="__span-35-3"><span class="c1"># Start session with monitor in right pane</span>
+</span><span id="__span-35-4">tmux<span class="w"> </span>new-session<span class="w"> </span>-s<span class="w"> </span>ml<span class="w"> </span><span class="se">\;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-35-5"><span class="w">  </span>split-window<span class="w"> </span>-h<span class="w"> </span><span class="se">\;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-35-6"><span class="w">  </span>send-keys<span class="w"> </span><span class="s1">&#39;nvitop -m compact&#39;</span><span class="w"> </span>Enter<span class="w"> </span><span class="se">\;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-35-7"><span class="w">  </span><span class="k">select</span>-pane<span class="w"> </span>-t<span class="w"> </span><span class="m">0</span>
+</span><span id="__span-35-8"><span class="c1"># Left pane = your work, right pane = GPU monitor</span>
+</span></code></pre></div>
+<hr />
+<h2 id="troubleshooting">Troubleshooting<a class="headerlink" href="#troubleshooting" title="Permanent link">&para;</a></h2>
+<h3 id="nvidia-smi-command-not-found-has-failed">nvidia-smi: command not found / has failed<a class="headerlink" href="#nvidia-smi-command-not-found-has-failed" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-36-1"><span class="c1"># Check if nouveau is blocking nvidia</span>
+</span><span id="__span-36-2">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nouveau<span class="w">    </span><span class="c1"># bad if this returns anything</span>
+</span><span id="__span-36-3">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>nvidia<span class="w">     </span><span class="c1"># should show multiple modules</span>
+</span><span id="__span-36-4">
+</span><span id="__span-36-5"><span class="c1"># Check kernel module status</span>
+</span><span id="__span-36-6">dmesg<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>nvidia
+</span><span id="__span-36-7">journalctl<span class="w"> </span>-b<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span>nvidia
+</span><span id="__span-36-8">
+</span><span id="__span-36-9"><span class="c1"># Re-blacklist and rebuild initramfs</span>
+</span><span id="__span-36-10"><span class="nb">echo</span><span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;blacklist nouveau\noptions nouveau modeset=0&quot;</span><span class="w"> </span><span class="se">\</span>
+</span><span id="__span-36-11"><span class="w">    </span><span class="p">|</span><span class="w"> </span>sudo<span class="w"> </span>tee<span class="w"> </span>/etc/modprobe.d/blacklist-nouveau.conf
+</span><span id="__span-36-12">sudo<span class="w"> </span>update-initramfs<span class="w"> </span>-u<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>reboot
+</span><span id="__span-36-13">
+</span><span id="__span-36-14"><span class="c1"># Force-load driver</span>
+</span><span id="__span-36-15">sudo<span class="w"> </span>modprobe<span class="w"> </span>nvidia
+</span></code></pre></div>
+<h3 id="torchcudais_available-returns-false">torch.cuda.is_available() Returns False<a class="headerlink" href="#torchcudais_available-returns-false" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-37-1"><span class="c1"># Step 1: Confirm driver works</span>
+</span><span id="__span-37-2">nvidia-smi
+</span><span id="__span-37-3">
+</span><span id="__span-37-4"><span class="c1"># Step 2: Check driver&#39;s max CUDA version</span>
+</span><span id="__span-37-5">nvidia-smi<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span><span class="s2">&quot;CUDA Version&quot;</span><span class="w">   </span><span class="c1"># e.g. CUDA Version: 13.2</span>
+</span><span id="__span-37-6">
+</span><span id="__span-37-7"><span class="c1"># Step 3: Check PyTorch CUDA version</span>
+</span><span id="__span-37-8">python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;import torch; print(torch.version.cuda)&quot;</span>
+</span><span id="__span-37-9">
+</span><span id="__span-37-10"><span class="c1"># Step 4: Reinstall with correct wheel if mismatch</span>
+</span><span id="__span-37-11">pip<span class="w"> </span>uninstall<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span>-y
+</span><span id="__span-37-12">pip<span class="w"> </span>install<span class="w"> </span>torch<span class="w"> </span>torchvision<span class="w"> </span>torchaudio<span class="w"> </span><span class="se">\</span>
+</span><span id="__span-37-13"><span class="w">    </span>--index-url<span class="w"> </span>https://download.pytorch.org/whl/cu129
+</span><span id="__span-37-14">
+</span><span id="__span-37-15"><span class="c1"># Step 5: Confirm you&#39;re in the right environment</span>
+</span><span id="__span-37-16">which<span class="w"> </span>python3<span class="w">        </span><span class="c1"># must NOT be /usr/bin/python3</span>
+</span><span id="__span-37-17">mamba<span class="w"> </span>activate<span class="w"> </span>ml
+</span></code></pre></div>
+<h3 id="laptop-gpu-detected-but-model-runs-on-cpu-optimus">Laptop: GPU Detected but Model Runs on CPU (Optimus)<a class="headerlink" href="#laptop-gpu-detected-but-model-runs-on-cpu-optimus" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-38-1">prime-select<span class="w"> </span>query
+</span><span id="__span-38-2">
+</span><span id="__span-38-3"><span class="c1"># Run explicitly on NVIDIA GPU</span>
+</span><span id="__span-38-4">prime-run<span class="w"> </span>python3<span class="w"> </span>my_script.py
+</span><span id="__span-38-5">
+</span><span id="__span-38-6"><span class="c1"># Or switch to NVIDIA-only</span>
+</span><span id="__span-38-7">sudo<span class="w"> </span>prime-select<span class="w"> </span>nvidia<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>sudo<span class="w"> </span>reboot
+</span><span id="__span-38-8">
+</span><span id="__span-38-9"><span class="c1"># Verify GPU utilization is non-zero during inference</span>
+</span><span id="__span-38-10">nvidia-smi<span class="w"> </span>dmon
+</span></code></pre></div>
+<h3 id="cuda-out-of-memory">CUDA Out of Memory<a class="headerlink" href="#cuda-out-of-memory" title="Permanent link">&para;</a></h3>
+<div class="language-python highlight"><pre><span></span><code><span id="__span-39-1"><span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+</span><span id="__span-39-2">
+</span><span id="__span-39-3"><span class="c1"># Free cached memory</span>
+</span><span id="__span-39-4"><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">empty_cache</span><span class="p">()</span>
+</span><span id="__span-39-5">
+</span><span id="__span-39-6"><span class="c1"># Diagnose usage</span>
+</span><span id="__span-39-7"><span class="nb">print</span><span class="p">(</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">memory_summary</span><span class="p">())</span>
+</span><span id="__span-39-8"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Allocated: </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">memory_allocated</span><span class="p">()</span><span class="o">/</span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+</span><span id="__span-39-9"><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cached:    </span><span class="si">{</span><span class="n">torch</span><span class="o">.</span><span class="n">cuda</span><span class="o">.</span><span class="n">memory_reserved</span><span class="p">()</span><span class="o">/</span><span class="mf">1e9</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2"> GB&quot;</span><span class="p">)</span>
+</span><span id="__span-39-10">
+</span><span id="__span-39-11"><span class="c1"># Reduce memory footprint:</span>
+</span><span id="__span-39-12"><span class="c1"># 1. Mixed precision (fp16/bf16)</span>
+</span><span id="__span-39-13"><span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">half</span><span class="p">()</span>
+</span><span id="__span-39-14">
+</span><span id="__span-39-15"><span class="c1"># 2. Gradient checkpointing</span>
+</span><span id="__span-39-16"><span class="n">model</span><span class="o">.</span><span class="n">gradient_checkpointing_enable</span><span class="p">()</span>
+</span><span id="__span-39-17">
+</span><span id="__span-39-18"><span class="c1"># 3. 4-bit quantization (bitsandbytes, NVIDIA only)</span>
+</span><span id="__span-39-19"><span class="kn">from</span><span class="w"> </span><span class="nn">transformers</span><span class="w"> </span><span class="kn">import</span> <span class="n">BitsAndBytesConfig</span>
+</span><span id="__span-39-20"><span class="n">bnb_config</span> <span class="o">=</span> <span class="n">BitsAndBytesConfig</span><span class="p">(</span><span class="n">load_in_4bit</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</span></code></pre></div>
+<h3 id="kernel-update-broke-nvidia-driver">Kernel Update Broke NVIDIA Driver<a class="headerlink" href="#kernel-update-broke-nvidia-driver" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-40-1"><span class="c1"># Check DKMS status</span>
+</span><span id="__span-40-2">dkms<span class="w"> </span>status
+</span><span id="__span-40-3">
+</span><span id="__span-40-4"><span class="c1"># Rebuild for current kernel</span>
+</span><span id="__span-40-5">sudo<span class="w"> </span>dkms<span class="w"> </span>autoinstall
+</span><span id="__span-40-6">
+</span><span id="__span-40-7"><span class="c1"># Or reinstall driver</span>
+</span><span id="__span-40-8">sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>--reinstall<span class="w"> </span>nvidia-driver-570
+</span><span id="__span-40-9">sudo<span class="w"> </span>reboot
+</span><span id="__span-40-10">
+</span><span id="__span-40-11"><span class="c1"># Check build log if still failing</span>
+</span><span id="__span-40-12">cat<span class="w"> </span>/var/lib/dkms/nvidia/570*/build/make.log<span class="w"> </span><span class="p">|</span><span class="w"> </span>tail<span class="w"> </span>-50
+</span></code></pre></div>
+<h3 id="ollama-using-cpu-instead-of-gpu">Ollama Using CPU Instead of GPU<a class="headerlink" href="#ollama-using-cpu-instead-of-gpu" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-41-1"><span class="c1"># Check logs for GPU detection</span>
+</span><span id="__span-41-2">journalctl<span class="w"> </span>-u<span class="w"> </span>ollama<span class="w"> </span>--no-pager<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;gpu\|cuda\|rocm&quot;</span>
+</span><span id="__span-41-3">
+</span><span id="__span-41-4"><span class="c1"># Run in foreground to see output</span>
+</span><span id="__span-41-5">ollama<span class="w"> </span>serve<span class="w">   </span><span class="c1"># look for &quot;using GPU&quot; vs &quot;0 GPU layers&quot;</span>
+</span><span id="__span-41-6">
+</span><span id="__span-41-7"><span class="c1"># Fix: reinstall AFTER driver is working</span>
+</span><span id="__span-41-8">curl<span class="w"> </span>-fsSL<span class="w"> </span>https://ollama.com/install.sh<span class="w"> </span><span class="p">|</span><span class="w"> </span>sh
+</span><span id="__span-41-9">
+</span><span id="__span-41-10"><span class="c1"># Fix: verify nvidia-smi works first</span>
+</span><span id="__span-41-11">nvidia-smi
+</span></code></pre></div>
+<h3 id="full-diagnostic-script">Full Diagnostic Script<a class="headerlink" href="#full-diagnostic-script" title="Permanent link">&para;</a></h3>
+<div class="language-bash highlight"><pre><span></span><code><span id="__span-42-1"><span class="ch">#!/bin/bash</span>
+</span><span id="__span-42-2"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;===== GPU DIAGNOSTIC =====&quot;</span>
+</span><span id="__span-42-3"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;--- GPU Hardware ---&quot;</span>
+</span><span id="__span-42-4">lspci<span class="w"> </span>-nn<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-i<span class="w"> </span><span class="s2">&quot;VGA\|3D\|Display&quot;</span>
+</span><span id="__span-42-5"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-42-6"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;--- Kernel Modules ---&quot;</span>
+</span><span id="__span-42-7">lsmod<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>-E<span class="w"> </span><span class="s2">&quot;nvidia|nouveau|amdgpu&quot;</span><span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;none found&quot;</span>
+</span><span id="__span-42-8"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-42-9"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;--- NVIDIA Driver ---&quot;</span>
+</span><span id="__span-42-10">nvidia-smi<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;nvidia-smi not found&quot;</span>
+</span><span id="__span-42-11"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-42-12"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;--- ROCm ---&quot;</span>
+</span><span id="__span-42-13">rocm-smi<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;rocm-smi not found&quot;</span>
+</span><span id="__span-42-14"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-42-15"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;--- Python / PyTorch ---&quot;</span>
+</span><span id="__span-42-16">python3<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;</span>
+</span><span id="__span-42-17"><span class="s2">try:</span>
+</span><span id="__span-42-18"><span class="s2">    import torch</span>
+</span><span id="__span-42-19"><span class="s2">    print(f&#39;PyTorch {torch.__version__}&#39;)</span>
+</span><span id="__span-42-20"><span class="s2">    print(f&#39;CUDA available: {torch.cuda.is_available()}&#39;)</span>
+</span><span id="__span-42-21"><span class="s2">    if torch.cuda.is_available():</span>
+</span><span id="__span-42-22"><span class="s2">        print(f&#39;GPU: {torch.cuda.get_device_name(0)}&#39;)</span>
+</span><span id="__span-42-23"><span class="s2">        mem = torch.cuda.get_device_properties(0).total_memory</span>
+</span><span id="__span-42-24"><span class="s2">        print(f&#39;VRAM: {mem/1e9:.1f} GB&#39;)</span>
+</span><span id="__span-42-25"><span class="s2">except ImportError:</span>
+</span><span id="__span-42-26"><span class="s2">    print(&#39;PyTorch not installed&#39;)</span>
+</span><span id="__span-42-27"><span class="s2">&quot;</span><span class="w"> </span><span class="m">2</span>&gt;/dev/null
+</span><span id="__span-42-28"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
+</span><span id="__span-42-29"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;--- CUDA Toolkit ---&quot;</span>
+</span><span id="__span-42-30">nvcc<span class="w"> </span>--version<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="o">||</span><span class="w"> </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;nvcc not found&quot;</span>
+</span><span id="__span-42-31"><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;===== END DIAGNOSTIC =====&quot;</span>
+</span></code></pre></div>
+<hr />
+<p><em>Verified against: <a href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/">NVIDIA CUDA Install Guide (v13.2)</a>, <a href="https://ubuntu.com/server/docs/how-to/graphics/install-nvidia-drivers/">Ubuntu NVIDIA Driver Docs</a>, <a href="https://rocm.docs.amd.com/projects/install-on-linux/en/latest/install/3rd-party/pytorch-install.html">ROCm PyTorch Install (AMD)</a>, <a href="https://github.com/Syllo/nvtop">nvtop GitHub</a>, <a href="https://github.com/ggml-org/llama.cpp">llama.cpp GitHub</a> — April 2026</em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+    <div class="md-copyright__highlight">
+      Built with MkDocs Material · April 2026
+    </div>
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/ten-jampa" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "..", "features": ["navigation.tabs", "navigation.sections", "navigation.top", "navigation.tracking", "navigation.instant", "toc.follow", "search.suggest", "search.highlight", "content.code.copy", "content.code.annotate", "content.tabs.link"], "search": "../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
